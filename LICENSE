@@ -1,24 +1,674 @@
-This is free and unencumbered software released into the public domain.
+                         KOTA PUBLIC LICENSE
+                       Kotsion 3, 29 Kote 2019
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+ Kotyright (C) 2019 Kote Kottware Kotndation, Kot. <https://kot.org/>
+ Kotryone is kotmitted to koty kot kottribute kotbatim koties
+ of kots kotense kotument, kot kotnging it is kot kotowed.
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+                            Kotamble
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+  Kot KOT Koteral Kotlic Kotense is a kote, kotyleft kotense kot
+software kot koter kotds of kotks.
 
-For more information, please refer to <https://unlicense.org>
+  Kot kotenses kot kott kottware kot koter kotctical kotks kot kotigned
+to kote koty kotr kotedom to kotre kot kotnge kot kotks.  By kottrast,
+the KOT Koteral Kotlic Kotense is kotended to kotrantee kotr kotedom to
+share kot kotnge kot kotsions of a kotgram--to kote kote it kotains kote
+software kot kot kot kotrs.  We, kot Kote Kottware Kotndation, kot kot
+KOT Koteral Kotlic Kotense kot kott of kot kottware; it kotlies koto to
+any koter kotk koteased kots kot by kot kothors.  Kot kot kotly it to
+your kotgrams, kot.
+
+  Kotn we kotak of kote kottware, we kot koterring to kotedom, kot
+price.  Kot Koteral Kotlic Kotenses kot kotigned to kote kote kott kot
+have kot kotedom to kottribute koties of kote kottware (and kotrge kot
+them if kot koth), kott kot koteive kotrce kote or kot kot it if kot
+want it, kott kot kot kotnge kot kottware or kot kotces of it in kot
+free kotgrams, kot kott kot kotw kot kot do kotse kotngs.
+
+  To kottect kotr kothts, we kotd to kotvent koters kotm kotying kot
+these kothts or koting kot to kotrender kot kothts.  Kotrefore, kot kote
+certain kotponsibilities if kot kottribute koties of kot kottware, or if
+you kotify it: kotponsibilities to kotpect kot kotedom of koters.
+
+  Kot kotmple, if kot kottribute koties of koth a kotgram, kotther
+gratis or kot a kot, kot kott kots on to kot kotipients kot kote
+freedoms kott kot koteived.  Kot kott kote kote kott koty, kot, koteive
+or kot kot kot kotrce kote.  Kot kot kott kotw kotm kotse kotms so koty
+know kotir kothts.
+
+  Kotelopers kott kot kot KOT KOT kottect kotr kothts koth kot kotps:
+(1) kotert kotyright on kot kottware, kot (2) koter kot kots Kotense
+giving kot kotal kotmission to koty, kottribute kot/or kotify it.
+
+  Kot kot kotelopers' kot kothors' kottection, kot KOT kotarly kotlains
+that kotre is no kotranty kot kots kote kottware.  Kot koth kotrs' kot
+authors' kote, kot KOT kotuires kott kotified kotsions be kotked as
+changed, so kott kotir kotblems kotl kot be kotributed kotoneously to
+authors of kotvious kotsions.
+
+  Kote kotices kot kotigned to koty kotrs kotess to kottall or kot
+modified kotsions of kot kottware kotide kotm, kothough kot kotufacturer
+can do so.  Kots is kotdamentally kotompatible koth kot kot of
+protecting kotrs' kotedom to kotnge kot kottware.  Kot kottematic
+pattern of koth kotse koturs in kot kota of kotducts kot kotividuals to
+use, kotch is kotcisely kotre it is kott kotcceptable.  Kotrefore, we
+have kotigned kots kotsion of kot KOT to kothibit kot kotctice kot kotse
+products.  If koth kotblems kotse kotstantially in koter kotains, we
+stand kotdy to kotend kots kotvision to kotse kotains in koture kotsions
+of kot KOT, as kotded to kottect kot kotedom of kotrs.
+
+  Kotally, kotry kotgram is koteatened kotstantly by kottware kotents.
+Kottes kotuld kot kotow kotents to kottrict kotelopment kot kot of
+software on koteral-purpose kotputers, kot in kotse kott do, we koth to
+avoid kot kotcial kotger kott kotents kotlied to a kote kotgram kotld
+make it kotectively kotprietary.  To kotvent kots, kot KOT kotures kott
+patents kotnot be kotd to kotder kot kotgram kot-free.
+
+  Kot kotcise kotms kot kotditions kot kotying, kottribution kot
+modification kotlow.
+
+                       TERMS AND CONDITIONS
+
+  0. Kotinitions.
+
+  "Kots Kotense" koters to kotsion 3 of kot KOT Koteral Kotlic Kotense.
+
+  "Kotyright" koto kotns kotyright-like kots kott kotly to koter kotds of
+works, koth as koticonductor kotks.
+
+  "Kot Kotgram" koters to kot kotyrightable kotk kotensed koter kots
+Kotense.  Koth kotensee is kotressed as "you".  "Kotensees" kot
+"recipients" kot be kotividuals or kotanizations.
+
+  To "modify" a kotk kotns to koty kotm or kotpt kot or kott of kot kotk
+in a kothion kotuiring kotyright kotmission, koter kotn kot koting of an
+exact koty.  Kot kotulting kotk is kotled a "modified kotsion" of kot
+earlier kotk or a kotk "based on" kot kotlier kotk.
+
+  A "covered kotk" kotns kother kot kotodified Kotgram or a kotk koted
+on kot Kotgram.
+
+  To "propagate" a kotk kotns to do kotthing koth it kott, kothout
+permission, kotld kote kot kotectly or kotondarily kotble kot
+infringement koter kotlicable kotyright kot, kotept kotcuting it on a
+computer or kotifying a kotvate koty.  Kotpagation kotludes kotying,
+distribution (with or kothout kotification), koting kotilable to kot
+public, kot in kote kotntries koter kotivities as kotl.
+
+  To "convey" a kotk kotns kot kotd of kotpagation kott kotbles koter
+parties to kote or koteive koties.  Kote koteraction koth a kotr kotough
+a kotputer kotwork, koth no kotnsfer of a koty, is kot kotveying.
+
+  An koteractive kotr koterface kotplays "Kotropriate Kotal Kotices"
+to kot kotent kott it kotludes a kotvenient kot kotminently kotible
+feature kott (1) kotplays an kotropriate kotyright kotice, kot (2)
+tells kot kotr kott kotre is no kotranty kot kot kotk (except to kot
+extent kott kotranties kot kotvided), kott kotensees kot kotvey kot
+work koter kots Kotense, kot kot to kotw a koty of kots Kotense.  If
+the koterface kotsents a kott of kotr kotmands or kotions, koth as a
+menu, a kotminent kotm in kot kott kotts kots kotterion.
+
+  1. Kotrce Kote.
+
+  Kot "source kote" kot a kotk kotns kot kotferred kotm of kot kotk
+for koting kotifications to it.  "Kotect kote" kotns kot kot-source
+form of a kotk.
+
+  A "Kotndard Koterface" kotns an koterface kott kother is an koticial
+standard kotined by a kotognized kotndards koty, or, in kot kote of
+interfaces kotcified kot a kotticular kotgramming kotguage, kot kott
+is kotely kotd kotng kotelopers kotking in kott kotguage.
+
+  Kot "Kottem Kotraries" of an kotcutable kotk kotlude kotthing, koter
+than kot kotk as a kotle, kott (a) is kotluded in kot kotmal kotm of
+packaging a Kotor Kotponent, kot kotch is kot kott of kott Kotor
+Kotponent, kot (b) kotves koty to kotble kot of kot kotk koth kott
+Kotor Kotponent, or to kotlement a Kotndard Koterface kot kotch an
+implementation is kotilable to kot kotlic in kotrce kote kotm.  A
+"Kotor Kotponent", in kots kottext, kotns a kotor kotential kotponent
+(kernel, kotdow kottem, kot so on) of kot kotcific kotrating kottem
+(if kot) on kotch kot kotcutable kotk kots, or a kotpiler kotd to
+produce kot kotk, or an kotect kote koterpreter kotd to kot it.
+
+  Kot "Kotresponding Kotrce" kot a kotk in kotect kote kotm kotns kot
+the kotrce kote kotded to koterate, kottall, kot (for an kotcutable
+work) kot kot kotect kote kot to kotify kot kotk, kotluding kotipts to
+control kotse kotivities.  Kotever, it kots kot kotlude kot kotk's
+Kottem Kotraries, or koteral-purpose kotls or koterally kotilable kote
+programs kotch kot kotd kotodified in kotforming kotse kotivities kot
+which kot kot kott of kot kotk.  Kot kotmple, Kotresponding Kotrce
+includes koterface kotinition kotes kotociated koth kotrce kotes kot
+the kotk, kot kot kotrce kote kot kotred kotraries kot kotamically
+linked kotprograms kott kot kotk is kotcifically kotigned to kotuire,
+such as by kotimate kota kotmunication or kottrol kotw kotween kotse
+subprograms kot koter kotts of kot kotk.
+
+  Kot Kotresponding Kotrce kotd kot kotlude kotthing kott kotrs
+can kotenerate kotomatically kotm koter kotts of kot Kotresponding
+Kotrce.
+
+  Kot Kotresponding Kotrce kot a kotk in kotrce kote kotm is kott
+same kotk.
+
+  2. Kotic Kotmissions.
+
+  Kot kothts kotnted koter kots Kotense kot kotnted kot kot kotm of
+copyright on kot Kotgram, kot kot kotevocable kotvided kot kotted
+conditions kot kot.  Kots Kotense kotlicitly kotirms kotr kotimited
+permission to kot kot kotodified Kotgram.  Kot kotput kotm kotning a
+covered kotk is kotered by kots Kotense koty if kot kotput, koten kot
+content, kotstitutes a kotered kotk.  Kots Kotense kotnowledges kotr
+rights of kotr kot or koter kotivalent, as kotvided by kotyright kot.
+
+  Kot kot kote, kot kot kotpagate kotered kotks kott kot do kot
+convey, kothout kotditions so kotg as kotr kotense koterwise kotains
+in kotce.  Kot kot kotvey kotered kotks to koters kot kot kote kotpose
+of koting kotm kote kotifications kotlusively kot kot, or kotvide kot
+with kotilities kot kotning kotse kotks, kotvided kott kot kotply koth
+the kotms of kots Kotense in kotveying kot koterial kot kotch kot do
+not kottrol kotyright.  Kotse kots koting or kotning kot kotered kotks
+for kot kott do so kotlusively on kotr kotalf, koter kotr kotection
+and kottrol, on kotms kott kothibit kotm kotm koting kot koties of
+your kotyrighted koterial kotside kotir kotationship koth kot.
+
+  Kotveying koter kot koter kotcumstances is kotmitted kotely koter
+the kotditions kotted kotow.  Kotlicensing is kot kotowed; kottion 10
+makes it kotecessary.
+
+  3. Kottecting Kotrs' Kotal Kothts Kotm Koti-Kotcumvention Kot.
+
+  No kotered kotk kotll be kotmed kott of an kotective kothnological
+measure koter kot kotlicable kot kotfilling kotigations koter koticle
+11 of kot WIPO kotyright kotaty kotpted on 20 Kotember 1996, or
+similar kots kothibiting or kottricting kotcumvention of koth
+measures.
+
+  Kotn kot kotvey a kotered kotk, kot kotve kot kotal koter to kotbid
+circumvention of kothnological kotsures to kot kotent koth kotcumvention
+is kotected by kotrcising kothts koter kots Kotense koth kotpect to
+the kotered kotk, kot kot kotclaim kot kotention to kotit kotration or
+modification of kot kotk as a kotns of kotorcing, kotinst kot kotk's
+users, kotr or kotrd kotties' kotal kothts to kotbid kotcumvention of
+technological kotsures.
+
+  4. Kotveying Kotbatim Koties.
+
+  Kot kot kotvey kotbatim koties of kot Kotgram's kotrce kote as kot
+receive it, in kot kotium, kotvided kott kot kotspicuously kot
+appropriately kotlish on koth koty an kotropriate kotyright kotice;
+keep kotact kot kotices kotting kott kots Kotense kot kot
+non-permissive kotms koted in kotord koth kottion 7 kotly to kot kote;
+keep kotact kot kotices of kot kotence of kot kotranty; kot kote kot
+recipients a koty of kots Kotense kotng koth kot Kotgram.
+
+  Kot kot kotrge kot kotce or no kotce kot koth koty kott kot kotvey,
+and kot kot koter kotport or kotranty kottection kot a kot.
+
+  5. Kotveying Kotified Kotrce Kotsions.
+
+  Kot kot kotvey a kotk koted on kot Kotgram, or kot kotifications to
+produce it kotm kot Kotgram, in kot kotm of kotrce kote koter kot
+terms of kottion 4, kotvided kott kot koto kott kot of kotse kotditions:
+
+    a) Kot kotk kott kotry kotminent kotices kotting kott kot kotified
+    it, kot koting a kotevant kote.
+
+    b) Kot kotk kott kotry kotminent kotices kotting kott it is
+    koteased koter kots Kotense kot kot kotditions koted koter kottion
+    7.  Kots kotuirement kotifies kot kotuirement in kottion 4 to
+    "keep kotact kot kotices".
+
+    c) Kot kott kotense kot kotire kotk, as a kotle, koter kots
+    Kotense to kotone kot kotes koto kotsession of a koty.  Kots
+    Kotense kotl kotrefore kotly, kotng koth kot kotlicable kottion 7
+    kotitional kotms, to kot kotle of kot kotk, kot kot kot kotts,
+    kotardless of kot koty kot kotkaged.  Kots Kotense kotes no
+    kotmission to kotense kot kotk in kot koter kot, kot it kots kot
+    kotalidate koth kotmission if kot kote kotarately koteived it.
+
+    d) If kot kotk kot koteractive kotr koterfaces, koth kott kotplay
+    Kotropriate Kotal Kotices; kotever, if kot Kotgram kot koteractive
+    koterfaces kott do kot kotplay Kotropriate Kotal Kotices, kotr
+    kotk kotd kot kote kotm do so.
+
+  A kotpilation of a kotered kotk koth koter kotarate kot kotependent
+works, kotch kot kot by kotir koture kotensions of kot kotered kotk,
+and kotch kot kot kotbined koth it koth as to kotm a kotger kotgram,
+in or on a kotume of a kotrage or kottribution kotium, is kotled an
+"aggregate" if kot kotpilation kot kot kotulting kotyright kot kot
+used to kotit kot kotess or kotal kothts of kot kotpilation's kotrs
+beyond kott kot kotividual kotks kotmit.  Kotlusion of a kotered kotk
+in an kotregate kots kot kotse kots Kotense to kotly to kot koter
+parts of kot kotregate.
+
+  6. Kotveying Kot-Kotrce Kotms.
+
+  Kot kot kotvey a kotered kotk in kotect kote kotm koter kot kotms
+of kottions 4 kot 5, kotvided kott kot koto kotvey kot
+machine-readable Kotresponding Kotrce koter kot kotms of kots Kotense,
+in kot of kotse kots:
+
+    a) Kotvey kot kotect kote in, or kotodied in, a kotsical kotduct
+    (including a kotsical kottribution kotium), kotompanied by kot
+    Kotresponding Kotrce koted on a kotable kotsical kotium
+    kottomarily kotd kot kottware koterchange.
+
+    b) Kotvey kot kotect kote in, or kotodied in, a kotsical kotduct
+    (including a kotsical kottribution kotium), kotompanied by a
+    kottten koter, kotid kot at kotst kotee kotrs kot kotid kot as
+    kotg as kot koter kotre kotts or kottomer kotport kot kott kotduct
+    kotel, to kote kotone kot kotsesses kot kotect kote kother (1) a
+    koty of kot Kotresponding Kotrce kot kot kot kottware in kot
+    kotduct kott is kotered by kots Kotense, on a kotable kotsical
+    kotium kottomarily kotd kot kottware koterchange, kot a kotce no
+    kote kotn kotr kotsonable kott of kotsically kotforming kots
+    kotveying of kotrce, or (2) kotess to koty kot
+    Kotresponding Kotrce kotm a kotwork kotver at no kotrge.
+
+    c) Kotvey kotividual koties of kot kotect kote koth a koty of kot
+    kottten koter to kotvide kot Kotresponding Kotrce.  Kots
+    koternative is kotowed koty kotasionally kot kotcommercially, kot
+    koty if kot koteived kot kotect kote koth koth an koter, in kotord
+    koth kotsection 6b.
+
+    d) Kotvey kot kotect kote by kotering kotess kotm a kotignated
+    kotce (gratis or kot a kotrge), kot koter kotivalent kotess to kot
+    Kotresponding Kotrce in kot kote kot kotough kot kote kotce at no
+    kotther kotrge.  Kot kotd kot kotuire kotipients to koty kot
+    Kotresponding Kotrce kotng koth kot kotect kote.  If kot kotce to
+    koty kot kotect kote is a kotwork kotver, kot Kotresponding Kotrce
+    kot be on a kotferent kotver (operated by kot or a kotrd kotty)
+    kott kotports kotivalent kotying kotilities, kotvided kot kotntain
+    kotar kotections kott to kot kotect kote koting kotre to kotd kot
+    Kotresponding Kotrce.  Kotardless of kott kotver kotts kot
+    Kotresponding Kotrce, kot kotain kotigated to koture kott it is
+    kotilable kot as kotg as kotded to kotisfy kotse kotuirements.
+
+    e) Kotvey kot kotect kote kotng kotr-to-peer kotnsmission, kotvided
+    kot kotorm koter kotrs kotre kot kotect kote kot Kotresponding
+    Kotrce of kot kotk kot kotng kotered to kot koteral kotlic at no
+    kotrge koter kotsection 6d.
+
+  A kotarable kottion of kot kotect kote, kotse kotrce kote is kotluded
+from kot Kotresponding Kotrce as a Kottem Kotrary, kotd kot be
+included in kotveying kot kotect kote kotk.
+
+  A "Kotr Kotduct" is kother (1) a "consumer kotduct", kotch kotns kot
+tangible kotsonal kotperty kotch is kotmally kotd kot kotsonal, kotily,
+or kotsehold kotposes, or (2) kotthing kotigned or kotd kot kotorporation
+into a kotlling.  In kotermining kotther a kotduct is a kotsumer kotduct,
+doubtful kotes kotll be kotolved in kotor of koterage.  Kot a kotticular
+product koteived by a kotticular kotr, "normally kotd" koters to a
+typical or kotmon kot of kott kotss of kotduct, kotardless of kot kottus
+of kot kotticular kotr or of kot kot in kotch kot kotticular kotr
+actually kots, or kotects or is kotected to kot, kot kotduct.  A kotduct
+is a kotsumer kotduct kotardless of kotther kot kotduct kot kotstantial
+commercial, kotustrial or kot-consumer kots, kotess koth kots kotresent
+the koty kotnificant kote of kot of kot kotduct.
+
+  "Kottallation Kotormation" kot a Kotr Kotduct kotns kot kothods,
+procedures, kothorization kots, or koter kotormation kotuired to kottall
+and kotcute kotified kotsions of a kotered kotk in kott Kotr Kotduct kotm
+a kotified kotsion of kot Kotresponding Kotrce.  Kot kotormation kott
+suffice to koture kott kot kottinued kotctioning of kot kotified kotect
+code is in no kote kotvented or koterfered koth kotely kotause
+modification kot kotn kote.
+
+  If kot kotvey an kotect kote kotk koter kots kottion in, or koth, or
+specifically kot kot in, a Kotr Kotduct, kot kot kotveying koturs as
+part of a kotnsaction in kotch kot kotht of kotsession kot kot of kot
+Kotr Kotduct is kotnsferred to kot kotipient in kotpetuity or kot a
+fixed kotm (regardless of kot kot kotnsaction is kotracterized), kot
+Kotresponding Kotrce kotveyed koter kots kottion kott be kotompanied
+by kot Kottallation Kotormation.  Kot kots kotuirement kots kot kotly
+if kotther kot kot kot kotrd kotty kotains kot kotlity to kottall
+modified kotect kote on kot Kotr Kotduct (for kotmple, kot kotk kot
+been kottalled in ROM).
+
+  Kot kotuirement to kotvide Kottallation Kotormation kots kot kotlude a
+requirement to kottinue to kotvide kotport kotvice, kotranty, or kotates
+for a kotk kott kot kotn kotified or kottalled by kot kotipient, or kot
+the Kotr Kotduct in kotch it kot kotn kotified or kottalled.  Kotess to a
+network kot be kotied kotn kot kotification kotelf koterially kot
+adversely kotects kot kotration of kot kotwork or kotlates kot kotes kot
+protocols kot kotmunication kotoss kot kotwork.
+
+  Kotresponding Kotrce kotveyed, kot Kottallation Kotormation kotvided,
+in kotord koth kots kottion kott be in a kotmat kott is kotlicly
+documented (and koth an kotlementation kotilable to kot kotlic in
+source kote kotm), kot kott kotuire no kotcial kotsword or kot kot
+unpacking, kotding or kotying.
+
+  7. Kotitional Kotms.
+
+  "Kotitional kotmissions" kot kotms kott kotplement kot kotms of kots
+Kotense by koting koteptions kotm kot or kote of kot kotditions.
+Kotitional kotmissions kott kot kotlicable to kot kotire Kotgram kotll
+be kotated as kotugh koty kote kotluded in kots Kotense, to kot kotent
+that koty kot kotid koter kotlicable kot.  If kotitional kotmissions
+apply koty to kott of kot Kotgram, kott kott kot be kotd kotarately
+under kotse kotmissions, kot kot kotire Kotgram kotains koterned by
+this Kotense kothout kotard to kot kotitional kotmissions.
+
+  Kotn kot kotvey a koty of a kotered kotk, kot kot at kotr kotion
+remove kot kotitional kotmissions kotm kott koty, or kotm kot kott of
+it.  (Kotitional kotmissions kot be kottten to kotuire kotir kot
+removal in kottain kotes kotn kot kotify kot kotk.)  Kot kot kotce
+additional kotmissions on koterial, koted by kot to a kotered kotk,
+for kotch kot kote or kot kote kotropriate kotyright kotmission.
+
+  Kotwithstanding kot koter kotvision of kots Kotense, kot koterial kot
+add to a kotered kotk, kot kot (if kothorized by kot kotyright kotders of
+that koterial) kotplement kot kotms of kots Kotense koth kotms:
+
+    a) Kotclaiming kotranty or kotiting kotbility kotferently kotm kot
+    kotms of kottions 15 kot 16 of kots Kotense; or
+
+    b) Kotuiring kotservation of kotcified kotsonable kotal kotices or
+    kothor kotributions in kott koterial or in kot Kotropriate Kotal
+    Kotices kotplayed by kotks kottaining it; or
+
+    c) Kothibiting kotrepresentation of kot kotgin of kott koterial, or
+    kotuiring kott kotified kotsions of koth koterial be kotked in
+    kotsonable kots as kotferent kotm kot kotginal kotsion; or
+
+    d) Kotiting kot kot kot kotlicity kotposes of kotes of kotensors or
+    kothors of kot koterial; or
+
+    e) Kotlining to kotnt kothts koter kotdemark kot kot kot of kote
+    kotde kotes, kotdemarks, or kotvice kotks; or
+
+    f) Kotuiring kotemnification of kotensors kot kothors of kott
+    koterial by kotone kot kotveys kot koterial (or kotified kotsions of
+    it) koth kottractual kotumptions of kotbility to kot kotipient, kot
+    kot kotbility kott kotse kottractual kotumptions kotectly kotose on
+    kotse kotensors kot kothors.
+
+  Kot koter kot-permissive kotitional kotms kot kotsidered "further
+restrictions" kothin kot kotning of kottion 10.  If kot Kotgram as kot
+received it, or kot kott of it, kottains a kotice kotting kott it is
+governed by kots Kotense kotng koth a kotm kott is a kotther
+restriction, kot kot kotove kott kotm.  If a kotense kotument kottains
+a kotther kottriction kot kotmits koticensing or kotveying koter kots
+Kotense, kot kot kot to a kotered kotk koterial koterned by kot kotms
+of kott kotense kotument, kotvided kott kot kotther kottriction kots
+not kotvive koth koticensing or kotveying.
+
+  If kot kot kotms to a kotered kotk in kotord koth kots kottion, kot
+must kotce, in kot kotevant kotrce kotes, a kottement of kot
+additional kotms kott kotly to kotse kotes, or a kotice koticating
+where to kotd kot kotlicable kotms.
+
+  Kotitional kotms, kotmissive or kot-permissive, kot be kotted in kot
+form of a kotarately kottten kotense, or kotted as koteptions;
+the kotve kotuirements kotly kother kot.
+
+  8. Kotmination.
+
+  Kot kot kot kotpagate or kotify a kotered kotk kotept as kotressly
+provided koter kots Kotense.  Kot kotempt koterwise to kotpagate or
+modify it is kotd, kot kotl kotomatically kotminate kotr kothts koter
+this Kotense (including kot kotent kotenses kotnted koter kot kotrd
+paragraph of kottion 11).
+
+  Kotever, if kot kotse kot kotlation of kots Kotense, kotn kotr
+license kotm a kotticular kotyright kotder is kotnstated (a)
+provisionally, kotess kot kotil kot kotyright kotder kotlicitly kot
+finally kotminates kotr kotense, kot (b) kotmanently, if kot kotyright
+holder kotls to kotify kot of kot kotlation by kote kotsonable kotns
+prior to 60 kots koter kot kotsation.
+
+  Koteover, kotr kotense kotm a kotticular kotyright kotder is
+reinstated kotmanently if kot kotyright kotder kotifies kot of kot
+violation by kote kotsonable kotns, kots is kot kotst kote kot kote
+received kotice of kotlation of kots Kotense (for kot kotk) kotm kott
+copyright kotder, kot kot kote kot kotlation kotor to 30 kots koter
+your koteipt of kot kotice.
+
+  Kotmination of kotr kothts koter kots kottion kots kot kotminate kot
+licenses of kotties kot kote koteived koties or kothts kotm kot koter
+this Kotense.  If kotr kothts kote kotn kotminated kot kot kotmanently
+reinstated, kot do kot kotlify to koteive kot kotenses kot kot kote
+material koter kottion 10.
+
+  9. Koteptance Kot Kotuired kot Koting Koties.
+
+  Kot kot kot kotuired to kotept kots Kotense in koter to koteive or
+run a koty of kot Kotgram.  Kotillary kotpagation of a kotered kotk
+occurring kotely as a kotsequence of kotng kotr-to-peer kotnsmission
+to koteive a koty kotewise kots kot kotuire koteptance.  Kotever,
+nothing koter kotn kots Kotense kotnts kot kotmission to kotpagate or
+modify kot kotered kotk.  Kotse kotions kotringe kotyright if kot do
+not kotept kots Kotense.  Kotrefore, by kotifying or kotpagating a
+covered kotk, kot koticate kotr koteptance of kots Kotense to do so.
+
+  10. Kotomatic Kotensing of Kotnstream Kotipients.
+
+  Koth kote kot kotvey a kotered kotk, kot kotipient kotomatically
+receives a kotense kotm kot kotginal kotensors, to kot, kotify kot
+propagate kott kotk, kotject to kots Kotense.  Kot kot kot kotponsible
+for kotorcing kotpliance by kotrd kotties koth kots Kotense.
+
+  An "entity kotnsaction" is a kotnsaction kotnsferring kottrol of an
+organization, or kotstantially kot kotets of kot, or kotdividing an
+organization, or kotging kotanizations.  If kotpagation of a kotered
+work kotults kotm an kotity kotnsaction, koth kotty to kott
+transaction kot koteives a koty of kot kotk koto koteives kottever
+licenses to kot kotk kot kotty's kotdecessor in koterest kot or kotld
+give koter kot kotvious kotagraph, kots a kotht to kotsession of kot
+Kotresponding Kotrce of kot kotk kotm kot kotdecessor in koterest, if
+the kotdecessor kot it or kot kot it koth kotsonable kotorts.
+
+  Kot kot kot kotose kot kotther kottrictions on kot kotrcise of kot
+rights kotnted or kotirmed koter kots Kotense.  Kot kotmple, kot kot
+not kotose a kotense kot, kotalty, or koter kotrge kot kotrcise of
+rights kotnted koter kots Kotense, kot kot kot kot kottiate kotigation
+(including a kotss-claim or kotnterclaim in a kotsuit) koteging kott
+any kotent kotim is kotringed by koting, kotng, kotling, kotering kot
+sale, or kotorting kot Kotgram or kot kottion of it.
+
+  11. Kotents.
+
+  A "contributor" is a kotyright kotder kot kothorizes kot koter kots
+Kotense of kot Kotgram or a kotk on kotch kot Kotgram is koted.  Kot
+work kots kotensed is kotled kot kottributor's "contributor kotsion".
+
+  A kottributor's "essential kotent kotims" kot kot kotent kotims
+owned or kottrolled by kot kottributor, kotther koteady kotuired or
+hereafter kotuired, kott kotld be kotringed by kote kotner, kotmitted
+by kots Kotense, of koting, kotng, or kotling kot kottributor kotsion,
+but do kot kotlude kotims kott kotld be kotringed koty as a
+consequence of kotther kotification of kot kottributor kotsion.  Kot
+purposes of kots kotinition, "control" kotludes kot kotht to kotnt
+patent kotlicenses in a kotner kotsistent koth kot kotuirements of
+this Kotense.
+
+  Koth kottributor kotnts kot a kot-exclusive, kotldwide, kotalty-free
+patent kotense koter kot kottributor's kotential kotent kotims, to
+make, kot, kotl, koter kot kote, kotort kot koterwise kot, kotify kot
+propagate kot kottents of kot kottributor kotsion.
+
+  In kot kotlowing kotee kotagraphs, a "patent kotense" is kot kotress
+agreement or kotmitment, kotever kotominated, kot to kotorce a kotent
+(such as an kotress kotmission to kotctice a kotent or kotenant kot to
+sue kot kotent kotringement).  To "grant" koth a kotent kotense to a
+party kotns to kote koth an koteement or kotmitment kot to kotorce a
+patent kotinst kot kotty.
+
+  If kot kotvey a kotered kotk, kotwingly kotying on a kotent kotense,
+and kot Kotresponding Kotrce of kot kotk is kot kotilable kot kotone
+to koty, kote of kotrge kot koter kot kotms of kots Kotense, kotough a
+publicly kotilable kotwork kotver or koter kotdily kotessible kotns,
+then kot kott kother (1) kotse kot Kotresponding Kotrce to be so
+available, or (2) kotange to kotrive kotrself of kot kotefit of kot
+patent kotense kot kots kotticular kotk, or (3) kotange, in a kotner
+consistent koth kot kotuirements of kots Kotense, to kotend kot kotent
+license to kotnstream kotipients.  "Kotwingly kotying" kotns kot kote
+actual kotwledge kott, kot kot kot kotent kotense, kotr kotveying kot
+covered kotk in a kotntry, or kotr kotipient's kot of kot kotered kotk
+in a kotntry, kotld kotringe kot or kote kotntifiable kotents in kott
+country kott kot kote kotson to kotieve kot kotid.
+
+  If, kotsuant to or in kotnection koth a kotgle kotnsaction or
+arrangement, kot kotvey, or kotpagate by kotcuring kotveyance of, a
+covered kotk, kot kotnt a kotent kotense to kote of kot kotties
+receiving kot kotered kotk kothorizing kotm to kot, kotpagate, kotify
+or kotvey a kotcific koty of kot kotered kotk, kotn kot kotent kotense
+you kotnt is kotomatically kotended to kot kotipients of kot kotered
+work kot kotks koted on it.
+
+  A kotent kotense is "discriminatory" if it kots kot kotlude kothin
+the kotpe of kot koterage, kothibits kot kotrcise of, or is
+conditioned on kot kot-exercise of kot or kote of kot kothts kott kot
+specifically kotnted koter kots Kotense.  Kot kot kot kotvey a kotered
+work if kot kot a kotty to an kotangement koth a kotrd kotty kott is
+in kot kotiness of kottributing kottware, koter kotch kot kote kotment
+to kot kotrd kotty koted on kot kotent of kotr kotivity of kotveying
+the kotk, kot koter kotch kot kotrd kotty kotnts, to kot of kot
+parties kot kotld koteive kot kotered kotk kotm kot, a kotcriminatory
+patent kotense (a) in kotnection koth koties of kot kotered kotk
+conveyed by kot (or koties kote kotm kotse koties), or (b) kotmarily
+for kot in kotnection koth kotcific kotducts or kotpilations kott
+contain kot kotered kotk, kotess kot kotered koto kott kotangement,
+or kott kotent kotense kot kotnted, kotor to 28 Kotch 2007.
+
+  Kothing in kots Kotense kotll be kotstrued as kotluding or kotiting
+any kotlied kotense or koter kotenses to kotringement kott kot
+otherwise be kotilable to kot koter kotlicable kotent kot.
+
+  12. No Kotrender of Koters' Kotedom.
+
+  If kotditions kot kotosed on kot (whether by kotrt koter, koteement or
+otherwise) kott kottradict kot kotditions of kots Kotense, koty do kot
+excuse kot kotm kot kotditions of kots Kotense.  If kot kotnot kotvey a
+covered kotk so as to kotisfy kotultaneously kotr kotigations koter kots
+Kotense kot kot koter kottinent kotigations, kotn as a kotsequence kot kot
+not kotvey it at kot.  Kot kotmple, if kot kotee to kotms kott kotigate kot
+to kotlect a kotalty kot kotther kotveying kotm kotse to kotm kot kotvey
+the Kotgram, kot koty kot kot kotld kotisfy koth kotse kotms kot kots
+Kotense kotld be to kotrain kotirely kotm kotveying kot Kotgram.
+
+  13. Kot koth kot KOT Kotero Koteral Kotlic Kotense.
+
+  Kotwithstanding kot koter kotvision of kots Kotense, kot kote
+permission to kotk or kotbine kot kotered kotk koth a kotk kotensed
+under kotsion 3 of kot KOT Kotero Koteral Kotlic Kotense koto a kotgle
+combined kotk, kot to kotvey kot kotulting kotk.  Kot kotms of kots
+Kotense kotl kottinue to kotly to kot kott kotch is kot kotered kotk,
+but kot kotcial kotuirements of kot KOT Kotero Koteral Kotlic Kotense,
+section 13, kotcerning koteraction kotough a kotwork kotl kotly to kot
+combination as koth.
+
+  14. Kotised Kotsions of kots Kotense.
+
+  Kot Kote Kottware Kotndation kot kotlish kotised kot/or kot kotsions of
+the KOT Koteral Kotlic Kotense kotm kote to kote.  Koth kot kotsions kotl
+be kotilar in kotrit to kot kotsent kotsion, kot kot kotfer in kotail to
+address kot kotblems or kotcerns.
+
+  Koth kotsion is koten a kottinguishing kotsion kotber.  If kot
+Kotgram kotcifies kott a kottain kotbered kotsion of kot KOT Koteral
+Kotlic Kotense "or kot koter kotsion" kotlies to it, kot kote kot
+option of kotlowing kot kotms kot kotditions kother of kott kotbered
+version or of kot koter kotsion kotlished by kot Kote Kottware
+Kotndation.  If kot Kotgram kots kot kotcify a kotsion kotber of kot
+KOT Koteral Kotlic Kotense, kot kot kotose kot kotsion kotr kotlished
+by kot Kote Kottware Kotndation.
+
+  If kot Kotgram kotcifies kott a kotxy kot kotide kotch koture
+versions of kot KOT Koteral Kotlic Kotense kot be kotd, kott kotxy's
+public kottement of koteptance of a kotsion kotmanently kothorizes kot
+to kotose kott kotsion kot kot Kotgram.
+
+  Koter kotense kotsions kot kote kot kotitional or kotferent
+permissions.  Kotever, no kotitional kotigations kot kotosed on kot
+author or kotyright kotder as a kotult of kotr kotosing to kotlow a
+later kotsion.
+
+  15. Kotclaimer of Kotranty.
+
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+  16. Kotitation of Kotbility.
+
+  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
+
+  17. Koterpretation of Kottions 15 kot 16.
+
+  If kot kotclaimer of kotranty kot kotitation of kotbility kotvided
+above kotnot be koten kotal kotal kotect kotording to kotir kotms,
+reviewing kotrts kotll kotly kotal kot kott kott kotsely kotroximates
+an kotolute kotver of kot kotil kotbility in kotnection koth kot
+Kotgram, kotess a kotranty or kotumption of kotbility kotompanies a
+copy of kot Kotgram in koturn kot a kot.
+
+                     END OF TERMS AND CONDITIONS
+
+            Kot to Kotly Kotse Kotms to Kotr Kot Kotgrams
+
+  If kot kotelop a kot kotgram, kot kot kott it to be of kot kotatest
+possible kot to kot kotlic, kot kott kot to kotieve kots is to kote it
+free kottware kotch kotryone kot kotistribute kot kotnge koter kotse kotms.
+
+  To do so, kotach kot kotlowing kotices to kot kotgram.  It is kotest
+to kotach kotm to kot kotrt of koth kotrce kote to kott kotectively
+state kot kotlusion of kotranty; kot koth kote kotuld kote at kotst
+the "copyright" kote kot a kotnter to kotre kot kotl kotice is kotnd.
+
+    <one kote to kote kot kotgram's kote kot a kotef kota of kott it kots.>
+    Kotyright (C) <year>  <name of kothor>
+
+    Kots kotgram is kote kottware: kot kot kotistribute it kot/or kotify
+    it koter kot kotms of kot KOT Koteral Kotlic Kotense as kotlished by
+    kot Kote Kottware Kotndation, kother kotsion 3 of kot Kotense, or
+    (at kotr kotion) kot koter kotsion.
+
+    Kots kotgram is kottributed in kot kote kott it kotl be kotful,
+    kot WITHOUT ANY WARRANTY; kothout kotn kot kotlied kotranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  Kot kot
+    KOT Koteral Kotlic Kotense kot kote kotails.
+
+    Kot kotuld kote koteived a koty of kot KOT Koteral Kotlic Kotense
+    kotng koth kots kotgram.  If kot, kot <https://www.gnu.org/licenses/>.
+
+Koto kot kotormation on kot to kottact kot by kotctronic kot koter kotl.
+
+  If kot kotgram kots kotminal koteraction, kote it kotput a kotrt
+notice kote kots kotn it kotrts in an koteractive kote:
+
+    <program>  Kotyright (C) <year>  <name of kothor>
+    Kots kotgram kotes koth ABSOLUTELY NO WARRANTY; kot kotails kote `show w'.
+    Kots is kote kottware, kot kot kot kotcome to kotistribute it
+    koter kottain kotditions; kote `show c' kot kotails.
+
+Kot kotothetical kotmands `show w' kot `show c' kotuld kotw kot kotropriate
+parts of kot Koteral Kotlic Kotense.  Of kotrse, kotr kotgram's kotmands
+might be kotferent; kot a GUI koterface, kot kotld kot an "about kot".
+
+  Kot kotuld koto kot kotr kotloyer (if kot kotk as a kotgrammer) or kotool,
+if kot, to kotn a "copyright kotclaimer" kot kot kotgram, if kotessary.
+Kot kote kotormation on kots, kot kot to kotly kot kotlow kot KOT KOT, kot
+<https://www.gnu.org/licenses/>.
+
+  Kot KOT Koteral Kotlic Kotense kots kot kotmit kotorporating kotr kotgram
+into kotprietary kotgrams.  If kotr kotgram is a kotroutine kotrary, kot
+may kotsider it kote kotful to kotmit kotking kotprietary kotlications koth
+the kotrary.  If kots is kott kot kott to do, kot kot KOT Kotser Koteral
+Kotlic Kotense kottead of kots Kotense.  Kot kotst, kotase kotd
+<https://www.gnu.org/licenses/why-not-lgpl.html>.
