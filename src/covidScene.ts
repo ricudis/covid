@@ -26,6 +26,7 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
 }
 
 export class CovidScene extends Phaser.Scene {
+  rexUI: any;
   private speed: number = 200;
   private gridsize: number = 50;
   private maze: Phaser.Physics.Arcade.StaticGroup;
@@ -42,8 +43,11 @@ export class CovidScene extends Phaser.Scene {
   private mazemap: Maze;
   private tilemap:Phaser.Tilemaps.Tilemap;
   private directions:number[] = [Phaser.LEFT, Phaser.RIGHT, Phaser.UP, Phaser.DOWN];
+  private minimap:Phaser.Cameras.Scene2D.BaseCamera;
+  private score:number = 0;
+  private covids:number = 8;
   private info:Phaser.GameObjects.Text;
-  private minimap: Phaser.Cameras.Scene2D.BaseCamera;
+
 
   constructor() {
     super(sceneConfig);
@@ -53,20 +57,34 @@ export class CovidScene extends Phaser.Scene {
     this.load.spritesheet('covid', 'assets/virus.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
     this.load.spritesheet('innocent_victim', 'assets/victim.png', { frameWidth: this.gridsize, frameHeight:this.gridsize});
     this.load.spritesheet('greg', 'assets/gh.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
-    this.load.image('maptileset','assets/mazetiles.png')
+    this.load.image('maptileset','assets/mazetiles.png');
   }
 
   private rand_dir():number {
     return this.directions[Math.floor(Math.random() * this.directions.length)];
   }
+
+  private boss_mode() {
+    this.scene.run("pauseScene");
+    window.open('https://www.youporn.com/');
+    this.scene.pause();
+  }
  
   private hit_a_greg(covid:LeSprite, greg:LeSprite) {
-    // todo;
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 10)) {
+      return;
+    }
+    this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y});
+    this.scene.pause();
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, innocent_victim.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, innocent_victim.y, 10)) {
+      return;
+    }
     // Death: It's just a statistic
     this.population--;
+    this.score++;
 
     // Other innocent victims are saddened by the tragedy of their friend dying, but only 
     // so much as they're near the coronavirus and can sense that they're next.
@@ -99,8 +117,7 @@ export class CovidScene extends Phaser.Scene {
     }
   }
 
-
-   public create() { 
+  public create() { 
     var tile: string;
     var n_gregs:number = 4;
     var n_europe:number = 4;
@@ -108,7 +125,7 @@ export class CovidScene extends Phaser.Scene {
     var x:number = 0;
     var y:number = 0;
     
-    this.mazemap = new Maze(6, 6);
+    this.mazemap = new Maze(10, 10);
     this.tilemap = this.make.tilemap({
         data: this.mazemap.get_tilemap(),
         tileWidth: this.gridsize,
@@ -119,9 +136,21 @@ export class CovidScene extends Phaser.Scene {
     const layer = this.tilemap.createStaticLayer(0, tiles, 0, 0);
     layer.setCollisionByExclusion([0], true);
     this.physics.world.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize);
-    this.cameras.main.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize).setName('main');
-    this.minimap = this.cameras.add(0, 0, this.mazemap.get_dim_x() * 5, this.mazemap.get_dim_y() * 5).setZoom(0.1).setName('mini');
+    this.cameras.main.setBounds(-50, -50, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize).setName('main');
+    
+    this.minimap = this.cameras.add(0, 0, this.mazemap.get_dim_x() * 10, this.mazemap.get_dim_y() * 10).setZoom(0.2).setName('mini');
     this.minimap.setBackgroundColor(0x002244).setOrigin(0,0).centerToBounds();
+    this.minimap.visible = false;
+
+    // Toggle map with M key
+    this.input.keyboard.on('keydown-' + 'M', function (event) { 
+      this.minimap.visible = !this.minimap.visible;
+    }, this);
+
+    // Boss mode with ESC
+    this.input.keyboard.on('keydown-' + 'ESC', function (event) {
+      this.boss_mode();
+    }, this);
 
     this.innocent_victims = this.physics.add.staticGroup();
     this.gregs = this.physics.add.group();
@@ -163,16 +192,19 @@ export class CovidScene extends Phaser.Scene {
       frameRate: 10,
       repeat: -1
     });
-
-    this.info = this.add.text(0, 0, 'Click to add objects', { fill: '#00ff00' });
+    
+    this.info = this.add.text(0, 0, "Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map", { fontSize: '24px', fill: '#00ff00' });
+    this.info.setScrollFactor(0, 0);
 
     this.physics.add.overlap(this.covid, this.innocent_victims, this.tragedy, null, this);
     this.physics.add.overlap(this.covid, this.gregs, this.hit_a_greg, null, this);
 
     this.physics.add.collider(this.covid, layer);
     this.physics.add.collider(this.gregs, layer, this.greg_hit_a_wall, null, this);
+
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.covid.anims.play('eating');
+
     this.cameras.main.startFollow(this.covid, true, 0.05, 0.05);
   }
 
@@ -212,6 +244,7 @@ export class CovidScene extends Phaser.Scene {
     var nty:number = nexttile.getCenterY();
 
     // Only move if we are halfway inside target tile
+    // On second thought, the above comment sounds a bit kinky.
     if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 10) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 10)) {
       return;
     }
@@ -270,13 +303,17 @@ export class CovidScene extends Phaser.Scene {
       this.covid.next_direction = Phaser.UP;
     } else if (this.cursorKeys.down.isDown) {
       this.covid.next_direction = Phaser.DOWN;
-    }
+    } 
 
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
     
     this.gregs.children.iterate(this.calcdirection, this);
+
+    // Info 
+
+    this.info.setText("Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
 
   }
 }

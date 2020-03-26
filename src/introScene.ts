@@ -53,7 +53,7 @@ export class IntroScene extends Phaser.Scene {
             .layout()
             .popUp(1000);
 
-
+      
       dialog
         .on('button.over', function (button, groupName, index, pointer, event) {
           button.getElement('background').setStrokeStyle(1, 0xffffff); 
@@ -68,7 +68,8 @@ export class IntroScene extends Phaser.Scene {
           } else if (index == 0) {
             this.scene.active = false;
             this.scene.visible = false;
-            this.scene.start("covidScene");
+            this.scene.start("covidScene", {level: 1, lives: 8});
+            this.scene.stop();
           }
       }, this);
 
@@ -111,11 +112,7 @@ export class IntroScene extends Phaser.Scene {
       targets: dialog,
       alpha: {value: 1, duration: 1000 }
     });
-
     timeline.play();
-
-
-    
   }
 }
 

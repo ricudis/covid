@@ -3,10 +3,14 @@ import * as Phaser from 'phaser';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import IntroScene from './introScene'; 
 import CovidScene from './covidScene';
+import PauseScene from './pauseScene';
+import DeathScene from './deathScene';
 
 // Our game scene
 var covidScene = new CovidScene();
 var introScene = new IntroScene();
+var pauseScene = new PauseScene();
+var deathScene = new DeathScene();
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Covid19',
@@ -14,6 +18,8 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   scale: {
     width: window.innerWidth,
     height: window.innerHeight,
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   physics: {
     default: 'arcade',
@@ -23,7 +29,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   },
   parent: 'game',
   backgroundColor: '#000000',
-  scene: [introScene, covidScene],
+  scene: [introScene, covidScene, pauseScene, deathScene],
   plugins: {
     scene: [{
         key: 'rexUI',
