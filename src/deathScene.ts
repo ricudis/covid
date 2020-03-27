@@ -59,15 +59,20 @@ export class DeathScene extends Phaser.Scene {
     });
     timeline.add({
       targets: buku,
-      x: { value : -200, duration: 5000 }
+      x: { value : -200, duration: 5000 },
     });
 
-    timeline.play();
+    timeline.setCallback('onComplete', function () { 
+      if (this.covids == 0) {
+        this.scene.start("gameoverScene");
+        this.scene.stop();
+      } else {
+        this.scene.resume("covidScene");
+        this.scene.stop();
+      }
+    }, null, this);
 
-    if (this.covids == 0) {
-      this.scene.start("gameoverScene");
-      this.scene.stop();
-    }
+    timeline.play();
   }
 }
 

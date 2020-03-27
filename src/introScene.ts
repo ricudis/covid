@@ -31,7 +31,7 @@ export class IntroScene extends Phaser.Scene {
   private createDialog() {
     var dialog = this.rexUI.add.dialog({
                 x: 200,
-                y: 300,
+                y: window.innerHeight/2,
                 width: 300,
                 background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
                 choices: [
@@ -62,13 +62,12 @@ export class IntroScene extends Phaser.Scene {
           button.getElement('background').setStrokeStyle();
         })
         .on('button.click', function (button, groupName, index, pointer, event) {
-          console.log("click ", groupName, " index ", index, " text ", button.text);
           if (index == 1) {
             window.open('https://github.com/ricudis/covid/');
           } else if (index == 0) {
             this.scene.active = false;
             this.scene.visible = false;
-            this.scene.start("covidScene", {level: 1, lives: 8});
+            this.scene.start("covidScene", {score: 0, level: 1, covids: 8});
             this.scene.stop();
           }
       }, this);
@@ -110,7 +109,7 @@ export class IntroScene extends Phaser.Scene {
 
     timeline.add({
       targets: dialog,
-      alpha: {value: 1, duration: 1000 }
+      alpha: { value: 1, duration: 1000 }
     });
     timeline.play();
   }

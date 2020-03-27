@@ -33,8 +33,9 @@ export class CovidScene extends Phaser.Scene {
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private covid: LeSprite;
   private innocent_victims: Phaser.Physics.Arcade.StaticGroup;
-  private gregs: Phaser.Physics.Arcade.Group;
-  private greg_array: Phaser.Physics.Arcade.Sprite[] = [];
+  private gregs: Phaser.Physics.Arcade.Group
+  private aunt_societies: Phaser.Physics.Arcade.Group;
+  private europes: Phaser.Physics.Arcade.Group;
   private velocity:Phaser.Math.Vector2 
   private population: number = 0;
   // This is not used in the game
@@ -47,16 +48,26 @@ export class CovidScene extends Phaser.Scene {
   private score:number = 0;
   private covids:number = 8;
   private info:Phaser.GameObjects.Text;
-
+  private level:number = 1; 
+  private hunt:boolean = false;
+  private reposition_covid:boolean = false;
 
   constructor() {
     super(sceneConfig);
+  }
+
+  public init(data) {
+    this.score = data.score;
+    this.covids = data.covids;
+    this.level = data.level;
   }
   
   public preload() {
     this.load.spritesheet('covid', 'assets/virus.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
     this.load.spritesheet('innocent_victim', 'assets/victim.png', { frameWidth: this.gridsize, frameHeight:this.gridsize});
     this.load.spritesheet('greg', 'assets/gh.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
+    this.load.spritesheet('aunt_society', 'assets/koutala.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
+    this.load.spritesheet('europe', 'assets/eu-flag.png', { frameWidth: this.gridsize, frameHeight:this.gridsize});
     this.load.image('maptileset','assets/mazetiles.png');
   }
 
@@ -64,10 +75,55 @@ export class CovidScene extends Phaser.Scene {
     return this.directions[Math.floor(Math.random() * this.directions.length)];
   }
 
+  private scene_resume() {
+    if (this.reposition_covid == false) {
+      return;
+    }
+    this.reposition_covid = false;
+    // reposition the resuscitated covid on a random map location
+    var x:number;
+    var y:number;
+    do {
+      x = this.mazemap.get_rand_x();
+      y = this.mazemap.get_rand_y();
+    } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
+    this.covid.setX(x * this.gridsize + (this.gridsize / 2));
+    this.covid.setY(y * this.gridsize + (this.gridsize / 2));
+    this.covid.setVisible(true);
+  }
+
   private boss_mode() {
     this.scene.run("pauseScene");
     window.open('https://www.youporn.com/');
     this.scene.pause();
+  }
+
+  private covid_death(covid:LeSprite) {
+    this.covids--;
+    this.reposition_covid = true;
+    // Play a dramatic death scene for the poor deceased covid
+    covid.setVisible(false);
+    this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y, covids: this.covids});
+    this.scene.pause();
+    // on resume, the event callback handler resuscitates the covid
+  }
+
+  private sustained_development(covid:LeSprite, europe:LeSprite) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, europe.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, europe.y, 10)) {
+      return;
+    }
+   
+    europe.disableBody(true, true);
+    this.hunt = true;
+  }
+
+  private miracle(covid:LeSprite, aunt_society:LeSprite) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 10)) {
+      return;
+    }
+   
+    aunt_society.disableBody(true, true);
+    this.covid_death(covid);
   }
  
   private hit_a_greg(covid:LeSprite, greg:LeSprite) {
@@ -75,22 +131,7 @@ export class CovidScene extends Phaser.Scene {
       return;
     }
 
-    this.covids--;
-
-    // reposition the resuscitated covid on a random map location
-    var x:number;
-    var y:number;
-    this.covid.setVisible(false);
-    do {
-      x = this.mazemap.get_rand_x();
-      y = this.mazemap.get_rand_y();
-    } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
-    this.covid.setX(x * this.gridsize + (this.gridsize / 2));
-    this.covid.setY(y * this.gridsize + (this.gridsize / 2));
-    
-    // Play a dramatic death scene for the poor deceased covid
-    this.scene.run("deathScene", {covid_x: covid.x + 50, covid_y: covid.y + 50, covids: this.covids});
-    this.scene.pause();
+    this.covid_death(covid);
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
@@ -135,8 +176,8 @@ export class CovidScene extends Phaser.Scene {
   public create() { 
     var tile: string;
     var n_gregs:number = 4;
-    var n_europe:number = 4;
-    var n_auntsociety:number = 4;
+    var n_europes:number = 4;
+    var n_aunt_societies:number = 4;
     var x:number = 0;
     var y:number = 0;
     
@@ -151,7 +192,7 @@ export class CovidScene extends Phaser.Scene {
     const layer = this.tilemap.createStaticLayer(0, tiles, 0, 0);
     layer.setCollisionByExclusion([0], true);
     this.physics.world.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize);
-    this.cameras.main.setBounds(-50, -50, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize).setName('main');
+    this.cameras.main.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize).setName('main');
     
     this.minimap = this.cameras.add(0, 0, this.mazemap.get_dim_x() * 10, this.mazemap.get_dim_y() * 10).setZoom(0.2).setName('mini');
     this.minimap.setBackgroundColor(0x002244).setOrigin(0,0).centerToBounds();
@@ -169,16 +210,23 @@ export class CovidScene extends Phaser.Scene {
 
     this.innocent_victims = this.physics.add.staticGroup();
     this.gregs = this.physics.add.group();
+    this.aunt_societies = this.physics.add.group();
+    this.europes = this.physics.add.group();
+
     this.velocity = new Phaser.Math.Vector2(0, 0);
 
-    for (y = 0; y < this.mazemap.get_dim_y(); y++) { 
+    var tmp_map:Phaser.Physics.Arcade.Sprite[][] = [];
+    
+    for (y = 0; y < this.mazemap.get_dim_y(); y++) {
+      tmp_map[y] = [];
       for (x = 0; x < this.mazemap.get_dim_x(); x++) {
         switch(this.mazemap.get_tile(this.mazemap.get_tilemap(), x,y)) {
           case 0:
             this.population++;
-            this.innocent_victims.create(x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'innocent_victim').setScale(0.7);
+            tmp_map[y][x] = this.innocent_victims.create(x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'innocent_victim').setScale(0.7);
             break;
           default:
+            tmp_map[y][x] = null;
             break;
         }
       }
@@ -200,6 +248,28 @@ export class CovidScene extends Phaser.Scene {
     } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
     this.covid = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'covid', true, this.speed);
     this.physics.add.existing(this.covid);
+    
+    for (var i:number = 0; i < n_aunt_societies; i++) {
+      do {
+        x = this.mazemap.get_rand_x();
+        y = this.mazemap.get_rand_y();
+      } while (tmp_map[y][x] == null);
+      var tmp_sprite = tmp_map[y][x];
+      tmp_sprite.disableBody(true, true);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0);
+      this.aunt_societies.add(tmp_map[y][x]);
+    }
+
+    for (var i:number = 0; i < n_europes; i++) {
+      do {
+        x = this.mazemap.get_rand_x();
+        y = this.mazemap.get_rand_y();
+      } while (tmp_map[y][x] == null);
+      var tmp_sprite = tmp_map[y][x];
+      tmp_sprite.disableBody(true, true);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0);
+      this.europes.add(tmp_map[y][x]);
+    }
 
     this.anims.create({
       key: 'eating',
@@ -210,9 +280,14 @@ export class CovidScene extends Phaser.Scene {
     
     this.info = this.add.text(0, 0, "Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map", { fontSize: '24px', fill: '#00ff00' });
     this.info.setScrollFactor(0, 0);
-
+    
+    // We use this to place the resuscitated covid in a new place if it was killed
+    this.events.on('resume', this.scene_resume, this);
+    
     this.physics.add.overlap(this.covid, this.innocent_victims, this.tragedy, null, this);
     this.physics.add.overlap(this.covid, this.gregs, this.hit_a_greg, null, this);
+    this.physics.add.overlap(this.covid, this.aunt_societies, this.miracle, null, this);
+    this.physics.add.overlap(this.covid, this.europes, this.sustained_development, null, this);
 
     this.physics.add.collider(this.covid, layer);
     this.physics.add.collider(this.gregs, layer, this.greg_hit_a_wall, null, this);
@@ -323,12 +398,10 @@ export class CovidScene extends Phaser.Scene {
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
-    
     this.gregs.children.iterate(this.calcdirection, this);
 
     // Info 
-
-    this.info.setText("Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
+    this.info.setText("Level : " + this.level.toString() + "  Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
 
   }
 }
