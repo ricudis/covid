@@ -74,7 +74,22 @@ export class CovidScene extends Phaser.Scene {
     if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 10)) {
       return;
     }
-    this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y});
+
+    this.covids--;
+
+    // reposition the resuscitated covid on a random map location
+    var x:number;
+    var y:number;
+    this.covid.setVisible(false);
+    do {
+      x = this.mazemap.get_rand_x();
+      y = this.mazemap.get_rand_y();
+    } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
+    this.covid.setX(x * this.gridsize + (this.gridsize / 2));
+    this.covid.setY(y * this.gridsize + (this.gridsize / 2));
+    
+    // Play a dramatic death scene for the poor deceased covid
+    this.scene.run("deathScene", {covid_x: covid.x + 50, covid_y: covid.y + 50, covids: this.covids});
     this.scene.pause();
   }
 

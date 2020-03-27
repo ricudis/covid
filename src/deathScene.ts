@@ -13,6 +13,7 @@ export class DeathScene extends Phaser.Scene {
   private covid_y:number = 0;
   private covid_size:number = 200;
   private sprite_size:number = 50;
+  private covids:number;
 
   constructor() {
     super(sceneConfig);
@@ -21,6 +22,7 @@ export class DeathScene extends Phaser.Scene {
   public init(data) {
     this.covid_x = data.covid_x;
     this.covid_y = data.covid_y;
+    this.covids = data.covids;
   }
 
   public preload() {
@@ -32,14 +34,14 @@ export class DeathScene extends Phaser.Scene {
     var covid:Phaser.GameObjects.Image = this.add.image(this.covid_x, this.covid_y, 'covid-big').setAlpha(0).setDisplaySize(this.sprite_size, this.sprite_size);
     var buku:Phaser.GameObjects.Image = this.add.image(window.innerWidth/2, window.innerHeight/2, 'bukurash').setAlpha(0);
     var timeline = this.tweens.createTimeline();
-
+    
     timeline.add({
       targets: covid,
       alpha: { value: 1, duration: 1 },
       displayHeight: { value: this.covid_size, duration: 3000, ease: 'Power2' },
       displayWidth: { value: this.covid_size, duration: 3000, ease: 'Power2' },
-      x: { value: window.innerWidth/2, duration:3000, ease: 'Power2' },
-      y: { value: window.innerHeight/2, duration:3000, ease: 'Power2' },
+      x: { value: window.innerWidth/2, duration: 3000, ease: 'Power2' },
+      y: { value: window.innerHeight/2, duration: 3000, ease: 'Power2' },
     });
 
     timeline.add({
@@ -48,7 +50,8 @@ export class DeathScene extends Phaser.Scene {
     });
     timeline.add({
       targets: covid,
-      alpha: { value : 0, duration: 1000 }
+      delay: 1000,
+      alpha: { value : 0, duration: 20 }
     });
     timeline.add({
       targets: buku,
@@ -57,10 +60,14 @@ export class DeathScene extends Phaser.Scene {
     timeline.add({
       targets: buku,
       x: { value : -200, duration: 5000 }
-    })
-    
-    
+    });
+
     timeline.play();
+
+    if (this.covids == 0) {
+      this.scene.start("gameoverScene");
+      this.scene.stop();
+    }
   }
 }
 
