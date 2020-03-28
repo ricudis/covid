@@ -13,6 +13,7 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
   public next_direction:number;
   public is_turnable:boolean;
   public le_speed:number = 0; 
+  public le_timer:Phaser.Time.TimerEvent;
 
   constructor(scene:Phaser.Scene, x:number, y:number, texture:string, is_turnable:boolean, le_speed:number) {
     super(scene, x, y, texture);
@@ -29,14 +30,12 @@ export class CovidScene extends Phaser.Scene {
   rexUI: any;
   private speed: number = 200;
   private gridsize: number = 50;
-  private maze: Phaser.Physics.Arcade.StaticGroup;
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private covid: LeSprite;
   private innocent_victims: Phaser.Physics.Arcade.StaticGroup;
   private gregs: Phaser.Physics.Arcade.Group
   private aunt_societies: Phaser.Physics.Arcade.Group;
   private europes: Phaser.Physics.Arcade.Group;
-  private velocity:Phaser.Math.Vector2 
   private population: number = 0;
   // This is not used in the game
   // It's just a matter of principle
@@ -75,21 +74,26 @@ export class CovidScene extends Phaser.Scene {
     return this.directions[Math.floor(Math.random() * this.directions.length)];
   }
 
-  private scene_resume() {
-    if (this.reposition_covid == false) {
-      return;
-    }
-    this.reposition_covid = false;
-    // reposition the resuscitated covid on a random map location
+  private reposition_sprite(thing:LeSprite) {
     var x:number;
     var y:number;
     do {
       x = this.mazemap.get_rand_x();
       y = this.mazemap.get_rand_y();
     } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
-    this.covid.setX(x * this.gridsize + (this.gridsize / 2));
-    this.covid.setY(y * this.gridsize + (this.gridsize / 2));
-    this.covid.setVisible(true);
+    thing.setX(x * this.gridsize + (this.gridsize / 2));
+    thing.setY(y * this.gridsize + (this.gridsize / 2));
+    thing.setVisible(true);
+    thing.current_direction = 0;
+    thing.next_direction = 0;
+  }
+
+  private scene_resume() {
+    if (this.reposition_covid == false) {
+      return;
+    }
+    this.reposition_covid = false;
+    this.reposition_sprite(this.covid);
   }
 
   private boss_mode() {
@@ -98,14 +102,22 @@ export class CovidScene extends Phaser.Scene {
     this.scene.pause();
   }
 
-  private covid_death(covid:LeSprite) {
+  private covid_psof(covid:LeSprite) {
     this.covids--;
     this.reposition_covid = true;
     // Play a dramatic death scene for the poor deceased covid
     covid.setVisible(false);
     this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y, covids: this.covids});
     this.scene.pause();
-    // on resume, the event callback handler resuscitates the covid
+    // on resume, the event callback handler resuscitates the psofed covid
+  }
+
+  // EU functionality 
+  private sustained_recession() {
+    this.hunt = false;
+    this.gregs.children.iterate(function(child:Phaser.Physics.Arcade.Sprite) {
+      child.setFrame(0);
+    });
   }
 
   private sustained_development(covid:LeSprite, europe:LeSprite) {
@@ -115,15 +127,24 @@ export class CovidScene extends Phaser.Scene {
    
     europe.disableBody(true, true);
     this.hunt = true;
+    this.time.delayedCall(10000, this.sustained_recession, null, this);
+    this.gregs.children.iterate(function(child:Phaser.Physics.Arcade.Sprite) {
+      child.setFrame(1);
+    });
   }
 
   private miracle(covid:LeSprite, aunt_society:LeSprite) {
     if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 10)) {
       return;
     }
-   
     aunt_society.disableBody(true, true);
-    this.covid_death(covid);
+    this.covid_psof(covid);
+  }
+
+  private reincarnate_greg(greg:LeSprite) {
+    // reposition the reincarnated greg on a random map location
+    this.reposition_sprite(greg);
+    this.greg_hit_a_wall(greg, null);
   }
  
   private hit_a_greg(covid:LeSprite, greg:LeSprite) {
@@ -131,7 +152,17 @@ export class CovidScene extends Phaser.Scene {
       return;
     }
 
-    this.covid_death(covid);
+    if (greg.visible == false) {
+      return;
+    }
+
+    if (this.hunt == false) {
+      this.covid_psof(covid);
+    } else {
+      this.score += 100;
+      greg.setVisible(false);
+      greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
+    }
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
@@ -174,14 +205,13 @@ export class CovidScene extends Phaser.Scene {
   }
 
   public create() { 
-    var tile: string;
     var n_gregs:number = 4;
-    var n_europes:number = 4;
-    var n_aunt_societies:number = 4;
+    var n_europes:number = 2;
+    var n_aunt_societies:number = 2;
     var x:number = 0;
     var y:number = 0;
     
-    this.mazemap = new Maze(10, 10);
+    this.mazemap = new Maze(7, 7);
     this.tilemap = this.make.tilemap({
         data: this.mazemap.get_tilemap(),
         tileWidth: this.gridsize,
@@ -212,8 +242,6 @@ export class CovidScene extends Phaser.Scene {
     this.gregs = this.physics.add.group();
     this.aunt_societies = this.physics.add.group();
     this.europes = this.physics.add.group();
-
-    this.velocity = new Phaser.Math.Vector2(0, 0);
 
     var tmp_map:Phaser.Physics.Arcade.Sprite[][] = [];
     
@@ -256,7 +284,7 @@ export class CovidScene extends Phaser.Scene {
       } while (tmp_map[y][x] == null);
       var tmp_sprite = tmp_map[y][x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0).setScale(0.7);
       this.aunt_societies.add(tmp_map[y][x]);
     }
 
@@ -267,7 +295,7 @@ export class CovidScene extends Phaser.Scene {
       } while (tmp_map[y][x] == null);
       var tmp_sprite = tmp_map[y][x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0).setScale(0.7);
       this.europes.add(tmp_map[y][x]);
     }
 

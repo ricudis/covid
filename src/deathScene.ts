@@ -64,6 +64,9 @@ export class DeathScene extends Phaser.Scene {
 
     timeline.setCallback('onComplete', function () { 
       if (this.covids == 0) {
+        this.scene.active = false;
+        this.scene.visible = false;
+        this.scene.stop("covidScene");
         this.scene.start("gameoverScene");
         this.scene.stop();
       } else {
