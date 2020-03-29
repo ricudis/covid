@@ -91,15 +91,48 @@ export class Maze {
 		return ({x: x, y: y, horiz: horiz, verti: verti});
 	}
 
+	private inner_wall(map:number[][], x:number, y:number, i:number) {
+		if (y == 1 && i == 0) return false;
+		if (y == map.length - 2 && i == 1) return false;
+		if (x == 1 && i == 2) return false;
+		if (x == map[y].length - 2 && i == 3) return false;
+		switch(i) {
+			case 0: return (map[y - 1][x] == 1); break;
+			case 1: return (map[y + 1][x] == 1); break;
+			case 2: return (map[y][x - 1] == 1); break;
+			case 3: return (map[y][x + 1] == 1); break;
+			default:
+				break;
+		}
+		return false;
+	}
+
 	private open_holes(map:number[][]) {
-		for (var y = 1; y < map.length - 1; y++) {
+		// Remove dead ends
+		for (var y = 1; y < map.length - 1; y++) {
 			for (var x = 1; x < map[y].length - 1 ; x++) {
-				if (map[y][x] != 1) {
+				if (map[y][x] != 0) {
 					continue;
 				}
-				if (Math.random() < 0.2) {
-					map[y][x] = 0;
-				} 
+				
+				if ((map[y - 1][x] + (map[y + 1][x]) + (map[y][x - 1]) + (map[y][x + 1])) != 3) {
+					continue;
+				}
+
+				var i:number;
+
+				do {
+					i = Math.floor(Math.random() * 4);
+				} while (this.inner_wall(map, x, y, i) == false);
+				
+				switch(i) {
+					case 0: map[y - 1][x] = 0; break;
+					case 1: map[y + 1][x] = 0; break;
+					case 2: map[y][x - 1] = 0; break;
+					case 3: map[y][x + 1] = 0; break;
+					default:
+						break;
+				}				
 			}
 		}
 		return map;
@@ -123,7 +156,7 @@ export class Maze {
 
 		// Open some holes
 		tmpmap = this.open_holes(tmpmap);
-
+		
 		// Convert maze to tilemap
 		for (var y:number = 0; y < tmpmap.length; y++) {
 			var line:number[] = [];

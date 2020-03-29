@@ -55,7 +55,7 @@ export class DeathScene extends Phaser.Scene {
     });
     timeline.add({
       targets: buku,
-      alpha: { value : 1, duration: 3000 }
+      alpha: { value : 1, duration: 1000 }
     });
     timeline.add({
       targets: buku,

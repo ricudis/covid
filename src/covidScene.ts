@@ -83,9 +83,9 @@ export class CovidScene extends Phaser.Scene {
     } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
     thing.setX(x * this.gridsize + (this.gridsize / 2));
     thing.setY(y * this.gridsize + (this.gridsize / 2));
-    thing.setVisible(true);
     thing.current_direction = 0;
     thing.next_direction = 0;
+    thing.setVisible(true);
   }
 
   private scene_resume() {
@@ -109,10 +109,10 @@ export class CovidScene extends Phaser.Scene {
     covid.setVisible(false);
     this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y, covids: this.covids});
     this.scene.pause();
-    // on resume, the event callback handler resuscitates the psofed covid
+    // on resume, the scene event callback handler reincarnates the psofed covid
   }
 
-  // EU functionality 
+  // EU logic
   private sustained_recession() {
     this.hunt = false;
     this.gregs.children.iterate(function(child:Phaser.Physics.Arcade.Sprite) {
@@ -133,21 +133,13 @@ export class CovidScene extends Phaser.Scene {
     });
   }
 
-  private miracle(covid:LeSprite, aunt_society:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 10)) {
-      return;
-    }
-    aunt_society.disableBody(true, true);
-    this.covid_psof(covid);
-  }
-
   private reincarnate_greg(greg:LeSprite) {
     // reposition the reincarnated greg on a random map location
     this.reposition_sprite(greg);
     this.greg_hit_a_wall(greg, null);
   }
  
-  private hit_a_greg(covid:LeSprite, greg:LeSprite) {
+  private close_encounter_of_the_third_type(covid:LeSprite, greg:LeSprite) {
     if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 10)) {
       return;
     }
@@ -163,6 +155,15 @@ export class CovidScene extends Phaser.Scene {
       greg.setVisible(false);
       greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
     }
+  }
+
+  // Aunt Society logic
+  private miracle(covid:LeSprite, aunt_society:LeSprite) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 10)) {
+      return;
+    }
+    aunt_society.disableBody(true, true);
+    this.covid_psof(covid);
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
@@ -207,7 +208,7 @@ export class CovidScene extends Phaser.Scene {
   public create() { 
     var n_gregs:number = 4;
     var n_europes:number = 2;
-    var n_aunt_societies:number = 2;
+    var n_aunt_societies:number = 1;
     var x:number = 0;
     var y:number = 0;
     
@@ -284,7 +285,7 @@ export class CovidScene extends Phaser.Scene {
       } while (tmp_map[y][x] == null);
       var tmp_sprite = tmp_map[y][x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0).setScale(0.7);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0).setScale(0.5);
       this.aunt_societies.add(tmp_map[y][x]);
     }
 
@@ -295,7 +296,7 @@ export class CovidScene extends Phaser.Scene {
       } while (tmp_map[y][x] == null);
       var tmp_sprite = tmp_map[y][x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0).setScale(0.7);
+      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0).setScale(0.5);
       this.europes.add(tmp_map[y][x]);
     }
 
@@ -309,11 +310,11 @@ export class CovidScene extends Phaser.Scene {
     this.info = this.add.text(0, 0, "Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map", { fontSize: '24px', fill: '#00ff00' });
     this.info.setScrollFactor(0, 0);
     
-    // We use this to place the resuscitated covid in a new place if it was killed
+    // We use this to place the reincarnated covid in a new place if it was killed
     this.events.on('resume', this.scene_resume, this);
     
     this.physics.add.overlap(this.covid, this.innocent_victims, this.tragedy, null, this);
-    this.physics.add.overlap(this.covid, this.gregs, this.hit_a_greg, null, this);
+    this.physics.add.overlap(this.covid, this.gregs, this.close_encounter_of_the_third_type, null, this);
     this.physics.add.overlap(this.covid, this.aunt_societies, this.miracle, null, this);
     this.physics.add.overlap(this.covid, this.europes, this.sustained_development, null, this);
 
@@ -328,23 +329,12 @@ export class CovidScene extends Phaser.Scene {
 
   private getneightiles(thing:LeSprite):Phaser.Tilemaps.Tile[] {
     const thingtile = this.tilemap.getTileAtWorldXY(thing.x, thing.y);
-    
-    if (!thingtile) {
-      return([null, null, null, null]);
-    }
-
-    return([this.tilemap.getTileAt(thingtile.x - 1, thingtile.y),
-            this.tilemap.getTileAt(thingtile.x + 1, thingtile.y),
-            this.tilemap.getTileAt(thingtile.x, thingtile.y - 1),
-            this.tilemap.getTileAt(thingtile.x, thingtile.y + 1)]);
-  }
-
-  private tileatdirection(direction:number, neightiles:Phaser.Tilemaps.Tile[]):Phaser.Tilemaps.Tile {
-    return (direction == Phaser.UP ? neightiles[2] : 
-            direction == Phaser.DOWN ? neightiles[3] : 
-            direction == Phaser.LEFT ? neightiles[0] : 
-            direction == Phaser.RIGHT ? neightiles[1] : 
-            null);
+    var neigh:Phaser.Tilemaps.Tile[] = [null, null, null, null, null, null, null, null, null, null];
+    neigh[Phaser.LEFT] = this.tilemap.getTileAt(thingtile.x - 1, thingtile.y);
+    neigh[Phaser.RIGHT] = this.tilemap.getTileAt(thingtile.x + 1, thingtile.y);
+    neigh[Phaser.UP] = this.tilemap.getTileAt(thingtile.x, thingtile.y - 1);
+    neigh[Phaser.DOWN] = this.tilemap.getTileAt(thingtile.x, thingtile.y + 1)
+    return(neigh);
   }
 
   private calcdirection(thing:LeSprite):void {
@@ -352,7 +342,7 @@ export class CovidScene extends Phaser.Scene {
       return;
     }
     
-    var nexttile:Phaser.Tilemaps.Tile = this.tileatdirection(thing.next_direction, this.getneightiles(thing));
+    var nexttile:Phaser.Tilemaps.Tile = this.getneightiles(thing)[thing.next_direction];
     
     if (nexttile == null || nexttile.index != 0) {
       return;
@@ -406,7 +396,7 @@ export class CovidScene extends Phaser.Scene {
 
     do {
       greg.next_direction = this.rand_dir();
-      nexttile = this.tileatdirection(greg.next_direction, this.getneightiles(greg));
+      nexttile = this.getneightiles(greg)[greg.next_direction];
     } while (nexttile == null || nexttile.index != 0 || greg.current_direction == greg.next_direction);
 
     this.calcdirection(greg);
@@ -426,13 +416,12 @@ export class CovidScene extends Phaser.Scene {
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
-    this.gregs.children.iterate(this.calcdirection, this);
+    // this.gregs.children.iterate(this.move_greg, this);
 
     // Info 
     this.info.setText("Level : " + this.level.toString() + "  Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
 
   }
 }
-
 
 export default CovidScene;
