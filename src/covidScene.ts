@@ -14,6 +14,12 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
   public is_turnable:boolean;
   public le_speed:number = 0; 
   public le_timer:Phaser.Time.TimerEvent;
+  public le_target_x:number;
+  public le_target_y:number;
+  public last_tile:Phaser.Tilemaps.Tile;
+  public le_chase:number;
+  public le_chase_timer:Phaser.Time.TimerEvent;
+
 
   constructor(scene:Phaser.Scene, x:number, y:number, texture:string, is_turnable:boolean, le_speed:number) {
     super(scene, x, y, texture);
@@ -23,6 +29,9 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
     this.current_direction = 0;
     this.next_direction = 0;
     this.le_speed = le_speed;
+    this.le_target_x = 0;
+    this.le_target_y = 0;
+    this.last_tile = null;
   }
 }
 
@@ -121,7 +130,7 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private sustained_development(covid:LeSprite, europe:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, europe.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, europe.y, 10)) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, europe.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, europe.y, 3)) {
       return;
     }
    
@@ -140,7 +149,7 @@ export class CovidScene extends Phaser.Scene {
   }
  
   private close_encounter_of_the_third_type(covid:LeSprite, greg:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 10)) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 3)) {
       return;
     }
 
@@ -159,7 +168,7 @@ export class CovidScene extends Phaser.Scene {
 
   // Aunt Society logic
   private miracle(covid:LeSprite, aunt_society:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 10)) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 3)) {
       return;
     }
     aunt_society.disableBody(true, true);
@@ -167,7 +176,7 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, innocent_victim.x, 10) && !Phaser.Math.Fuzzy.Equal(covid.y, innocent_victim.y, 10)) {
+    if (!Phaser.Math.Fuzzy.Equal(covid.x, innocent_victim.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, innocent_victim.y, 3)) {
       return;
     }
     // Death: It's just a statistic
@@ -206,7 +215,7 @@ export class CovidScene extends Phaser.Scene {
   }
 
   public create() { 
-    var n_gregs:number = 4;
+    var n_gregs:number = 1;
     var n_europes:number = 2;
     var n_aunt_societies:number = 1;
     var x:number = 0;
@@ -353,7 +362,7 @@ export class CovidScene extends Phaser.Scene {
 
     // Only move if we are halfway inside target tile
     // On second thought, the above comment sounds a bit kinky.
-    if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 10) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 10)) {
+    if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 3) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 3)) {
       return;
     }
 
@@ -388,6 +397,83 @@ export class CovidScene extends Phaser.Scene {
     thing.current_direction = thing.next_direction;
   }
 
+  private randdirection(thing:LeSprite):void {
+    const thingtile:Phaser.Tilemaps.Tile = this.tilemap.getTileAtWorldXY(thing.x, thing.y);
+
+    if (thing.last_tile == thingtile) {
+      return;
+    }
+
+    thing.last_tile = thingtile;
+
+    const ntx:number = thingtile.getCenterX();
+    const nty:number = thingtile.getCenterY();
+
+    if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 3) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 3)) {
+      return;
+    }
+
+    const neightiles:Phaser.Tilemaps.Tile[] = this.getneightiles(thing);
+    var neighcost:number[] = [];
+    
+    neighcost[Phaser.UP] = Phaser.Math.Distance.Chebyshev(thing.x, thing.y - 50, thing.le_target_x, thing.le_target_y);
+    neighcost[Phaser.DOWN] = Phaser.Math.Distance.Chebyshev(thing.x, thing.y + 50, thing.le_target_x, thing.le_target_y);
+    neighcost[Phaser.LEFT] = Phaser.Math.Distance.Chebyshev(thing.x - 50, thing.y, thing.le_target_x, thing.le_target_y);
+    neighcost[Phaser.RIGHT] = Phaser.Math.Distance.Chebyshev(thing.x + 50, thing.y, thing.le_target_x, thing.le_target_y);
+    
+    if (thing.current_direction == Phaser.UP || neightiles[Phaser.DOWN].index != 0) { neighcost[Phaser.DOWN] = 0; }
+    if (thing.current_direction == Phaser.DOWN || neightiles[Phaser.UP].index != 0) { neighcost[Phaser.UP] = 0; }
+    if (thing.current_direction == Phaser.LEFT || neightiles[Phaser.RIGHT].index != 0) { neighcost[Phaser.RIGHT] = 0; }
+    if (thing.current_direction == Phaser.RIGHT || neightiles[Phaser.LEFT].index != 0) { neighcost[Phaser.LEFT] = 0; }
+    
+    var mincostdir = Phaser.UP;
+    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.RIGHT] > 0 && neighcost[Phaser.RIGHT] < neighcost[mincostdir])) { mincostdir = Phaser.RIGHT; }
+    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.DOWN] > 0 && neighcost[Phaser.DOWN] < neighcost[mincostdir])) { mincostdir = Phaser.DOWN; }
+    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.LEFT] > 0 && neighcost[Phaser.LEFT] < neighcost[mincostdir])) { mincostdir = Phaser.LEFT; }
+
+    thing.next_direction = mincostdir;
+
+    if (thing.current_direction == thing.next_direction) {
+      return;
+    }
+
+    thing.body.reset(thingtile.getCenterX(),thingtile.getCenterY());
+
+    if (thing.next_direction == Phaser.UP) {
+      if (thing.is_turnable) {
+        thing.setAngle(270);
+        thing.setFlipX(false);
+      }
+      thing.setVelocity(0, -thing.le_speed);
+    } else if (thing.next_direction == Phaser.DOWN) {
+      if (thing.is_turnable) {
+        thing.setAngle(90);
+        thing.setFlipX(false);
+      }
+      thing.setVelocity(0, thing.le_speed);
+    } else if (thing.next_direction == Phaser.LEFT) {
+      if (thing.is_turnable) {
+        thing.setAngle(0);
+        thing.setFlipX(true);
+      }
+      thing.setVelocity(-thing.le_speed, 0);
+    } else if (thing.next_direction == Phaser.RIGHT) {
+      if (thing.is_turnable) {
+        thing.setAngle(0);
+        thing.setFlipX(false);
+      }
+      thing.setVelocity(thing.le_speed, 0);
+    }
+
+    thing.current_direction = thing.next_direction;
+  }
+
+  private move_greg(greg:LeSprite) {
+    greg.le_target_x = this.covid.x;
+    greg.le_target_y = this.covid.y;
+    this.randdirection(greg);
+  }
+
   private greg_hit_a_wall(greg:LeSprite, wall) {    
     var nexttile:Phaser.Tilemaps.Tile;
     if (greg.current_direction == 0) {
@@ -416,7 +502,7 @@ export class CovidScene extends Phaser.Scene {
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
-    // this.gregs.children.iterate(this.move_greg, this);
+    this.gregs.children.iterate(this.move_greg, this);
 
     // Info 
     this.info.setText("Level : " + this.level.toString() + "  Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
