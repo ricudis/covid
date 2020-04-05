@@ -7,6 +7,10 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   key: 'covidScene',
 };
 
+const GRIDSIZE:number = 50;
+
+// NETI
+const INFINITY:number = 0xDEADBEEF;
 
 class LeSprite extends Phaser.Physics.Arcade.Sprite {
   public current_direction:number;
@@ -14,31 +18,68 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
   public is_turnable:boolean;
   public le_speed:number = 0; 
   public le_timer:Phaser.Time.TimerEvent;
-  public le_target_x:number;
-  public le_target_y:number;
+  public le_target:Phaser.Math.Vector2;
   public last_tile:Phaser.Tilemaps.Tile;
-  public le_chase:number;
-  public le_chase_timer:Phaser.Time.TimerEvent;
 
-
-  constructor(scene:Phaser.Scene, x:number, y:number, texture:string, is_turnable:boolean, le_speed:number) {
-    super(scene, x, y, texture);
+  constructor(scene:Phaser.Scene, pos:Phaser.Math.Vector2, texture:string, is_turnable:boolean, le_speed:number) {
+    super(scene, pos.x * GRIDSIZE + (GRIDSIZE / 2), pos.y * GRIDSIZE + (GRIDSIZE / 2), texture);
     scene.add.existing(this);
     scene.physics.add.existing(this);
+    
     this.is_turnable = is_turnable;
     this.current_direction = 0;
     this.next_direction = 0;
     this.le_speed = le_speed;
-    this.le_target_x = 0;
-    this.le_target_y = 0;
+    this.le_target = new Phaser.Math.Vector2(0,0);
     this.last_tile = null;
   }
+
+  public reposition(pos:Phaser.Math.Vector2) {
+    this.setX(pos.x * GRIDSIZE + (GRIDSIZE / 2));
+    this.setY(pos.y * GRIDSIZE + (GRIDSIZE / 2));
+    this.current_direction = 0;
+    this.next_direction = 0;
+    this.setVisible(true);
+  }
+
+  public m_ares_na_knieme_knieme() {
+    if (this.current_direction == this.next_direction) {
+      return;
+    }
+    if (this.next_direction == Phaser.UP) {
+      if (this.is_turnable) {
+        this.setAngle(270);
+        this.setFlipX(false);
+      }
+      this.setVelocity(0, -this.le_speed);
+    } else if (this.next_direction == Phaser.DOWN) {
+      if (this.is_turnable) {
+        this.setAngle(90);
+        this.setFlipX(false);
+      }
+      this.setVelocity(0, this.le_speed);
+    } else if (this.next_direction == Phaser.LEFT) {
+      if (this.is_turnable) {
+        this.setAngle(0);
+        this.setFlipX(true);
+      }
+      this.setVelocity(-this.le_speed, 0);
+    } else if (this.next_direction == Phaser.RIGHT) {
+      if (this.is_turnable) {
+        this.setAngle(0);
+        this.setFlipX(false);
+      }
+      this.setVelocity(this.le_speed, 0);
+    }
+    
+    this.current_direction = this.next_direction;
+  }
+
 }
 
 export class CovidScene extends Phaser.Scene {
   rexUI: any;
   private speed: number = 200;
-  private gridsize: number = 50;
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private covid: LeSprite;
   private innocent_victims: Phaser.Physics.Arcade.StaticGroup;
@@ -59,6 +100,7 @@ export class CovidScene extends Phaser.Scene {
   private level:number = 1; 
   private hunt:boolean = false;
   private reposition_covid:boolean = false;
+  private tmp_map:Phaser.Physics.Arcade.Sprite[][] = [];
 
   constructor() {
     super(sceneConfig);
@@ -71,11 +113,11 @@ export class CovidScene extends Phaser.Scene {
   }
   
   public preload() {
-    this.load.spritesheet('covid', 'assets/virus.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
-    this.load.spritesheet('innocent_victim', 'assets/victim.png', { frameWidth: this.gridsize, frameHeight:this.gridsize});
-    this.load.spritesheet('greg', 'assets/gh.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
-    this.load.spritesheet('aunt_society', 'assets/koutala.png', { frameWidth: this.gridsize, frameHeight: this.gridsize });
-    this.load.spritesheet('europe', 'assets/eu-flag.png', { frameWidth: this.gridsize, frameHeight:this.gridsize});
+    this.load.spritesheet('covid', 'assets/virus.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
+    this.load.spritesheet('innocent_victim', 'assets/victim.png', { frameWidth: GRIDSIZE, frameHeight:GRIDSIZE});
+    this.load.spritesheet('greg', 'assets/gh.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
+    this.load.spritesheet('aunt_society', 'assets/koutala.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
+    this.load.spritesheet('europe', 'assets/eu-flag.png', { frameWidth: GRIDSIZE, frameHeight:GRIDSIZE});
     this.load.image('maptileset','assets/mazetiles.png');
   }
 
@@ -83,18 +125,14 @@ export class CovidScene extends Phaser.Scene {
     return this.directions[Math.floor(Math.random() * this.directions.length)];
   }
 
-  private reposition_sprite(thing:LeSprite) {
-    var x:number;
-    var y:number;
+  private rand_pos(empty_pos:boolean):Phaser.Math.Vector2 {
+    var ret:Phaser.Math.Vector2 = new Phaser.Math.Vector2();
     do {
-      x = this.mazemap.get_rand_x();
-      y = this.mazemap.get_rand_y();
-    } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
-    thing.setX(x * this.gridsize + (this.gridsize / 2));
-    thing.setY(y * this.gridsize + (this.gridsize / 2));
-    thing.current_direction = 0;
-    thing.next_direction = 0;
-    thing.setVisible(true);
+      ret.x = this.mazemap.get_rand_x();
+      ret.y = this.mazemap.get_rand_y();
+    } while ((!empty_pos && (this.mazemap.get_tile(this.mazemap.get_tilemap(), ret.x, ret.y) != 0)) || (empty_pos && this.tmp_map[ret.y][ret.x] == null));
+    
+    return ret;
   }
 
   private scene_resume() {
@@ -102,7 +140,7 @@ export class CovidScene extends Phaser.Scene {
       return;
     }
     this.reposition_covid = false;
-    this.reposition_sprite(this.covid);
+    this.covid.reposition(this.rand_pos(false));
   }
 
   private boss_mode() {
@@ -144,12 +182,15 @@ export class CovidScene extends Phaser.Scene {
 
   private reincarnate_greg(greg:LeSprite) {
     // reposition the reincarnated greg on a random map location
-    this.reposition_sprite(greg);
-    this.greg_hit_a_wall(greg, null);
+    greg.reposition(this.rand_pos(false));
+  }
+
+  private over(x:number, y:number, x1:number, y1:number) {
+    return (Phaser.Math.Fuzzy.Equal(x, x1, 4) && Phaser.Math.Fuzzy.Equal(y, y1, 4));
   }
  
   private close_encounter_of_the_third_type(covid:LeSprite, greg:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, greg.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, greg.y, 3)) {
+    if (!this.over(covid.x, covid.y, greg.x, greg.y)) {
       return;
     }
 
@@ -159,16 +200,18 @@ export class CovidScene extends Phaser.Scene {
 
     if (this.hunt == false) {
       this.covid_psof(covid);
-    } else {
-      this.score += 100;
-      greg.setVisible(false);
-      greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
+      return;
     }
+
+    this.score += 100;
+    greg.setVisible(false);
+    greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
+
   }
 
   // Aunt Society logic
   private miracle(covid:LeSprite, aunt_society:LeSprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, aunt_society.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, aunt_society.y, 3)) {
+    if (!this.over(covid.x, covid.y, aunt_society.x, aunt_society.y)) {
       return;
     }
     aunt_society.disableBody(true, true);
@@ -176,7 +219,7 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private tragedy(covid:LeSprite, innocent_victim:Phaser.Physics.Arcade.Sprite) {
-    if (!Phaser.Math.Fuzzy.Equal(covid.x, innocent_victim.x, 3) && !Phaser.Math.Fuzzy.Equal(covid.y, innocent_victim.y, 3)) {
+    if (!this.over(covid.x, covid.y, innocent_victim.x, innocent_victim.y)) {
       return;
     }
     // Death: It's just a statistic
@@ -215,24 +258,22 @@ export class CovidScene extends Phaser.Scene {
   }
 
   public create() { 
-    var n_gregs:number = 1;
+    var n_gregs:number = 4;
     var n_europes:number = 2;
     var n_aunt_societies:number = 1;
-    var x:number = 0;
-    var y:number = 0;
     
     this.mazemap = new Maze(7, 7);
     this.tilemap = this.make.tilemap({
         data: this.mazemap.get_tilemap(),
-        tileWidth: this.gridsize,
-        tileHeight: this.gridsize
+        tileWidth: GRIDSIZE,
+        tileHeight: GRIDSIZE
     });
     
     const tiles = this.tilemap.addTilesetImage('maptileset');
     const layer = this.tilemap.createStaticLayer(0, tiles, 0, 0);
     layer.setCollisionByExclusion([0], true);
-    this.physics.world.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize);
-    this.cameras.main.setBounds(0, 0, this.mazemap.get_dim_x() * this.gridsize, this.mazemap.get_dim_y() * this.gridsize).setName('main');
+    this.physics.world.setBounds(0, 0, this.mazemap.get_dim_x() * GRIDSIZE, this.mazemap.get_dim_y() * GRIDSIZE);
+    this.cameras.main.setBounds(0, 0, this.mazemap.get_dim_x() * GRIDSIZE, this.mazemap.get_dim_y() * GRIDSIZE).setName('main');
     
     this.minimap = this.cameras.add(0, 0, this.mazemap.get_dim_x() * 10, this.mazemap.get_dim_y() * 10).setZoom(0.2).setName('mini');
     this.minimap.setBackgroundColor(0x002244).setOrigin(0,0).centerToBounds();
@@ -253,60 +294,43 @@ export class CovidScene extends Phaser.Scene {
     this.aunt_societies = this.physics.add.group();
     this.europes = this.physics.add.group();
 
-    var tmp_map:Phaser.Physics.Arcade.Sprite[][] = [];
-    
-    for (y = 0; y < this.mazemap.get_dim_y(); y++) {
-      tmp_map[y] = [];
-      for (x = 0; x < this.mazemap.get_dim_x(); x++) {
+    for (var y:number = 0; y < this.mazemap.get_dim_y(); y++) {
+      this.tmp_map[y] = [];
+      for (var x:number = 0; x < this.mazemap.get_dim_x(); x++) {
         switch(this.mazemap.get_tile(this.mazemap.get_tilemap(), x,y)) {
           case 0:
             this.population++;
-            tmp_map[y][x] = this.innocent_victims.create(x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'innocent_victim').setScale(0.7);
+            this.tmp_map[y][x] = this.innocent_victims.create(x * GRIDSIZE + (GRIDSIZE / 2), y * GRIDSIZE + (GRIDSIZE / 2), 'innocent_victim').setScale(0.7);
             break;
           default:
-            tmp_map[y][x] = null;
+            this.tmp_map[y][x] = null;
             break;
         }
       }
     }
 
-    for (var i:number = 0; i < n_gregs; i++) { 
-      do {
-        x = this.mazemap.get_rand_x();
-        y = this.mazemap.get_rand_y();
-      } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
-      const greg = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'greg', false, this.speed/4);
-      this.gregs.add(greg);
-      this.greg_hit_a_wall(greg, null);
-    }
-  
-    do {
-      x = this.mazemap.get_rand_x();
-      y = this.mazemap.get_rand_y();
-    } while (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, y) != 0);
-    this.covid = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'covid', true, this.speed);
+    this.covid = new LeSprite(this, this.rand_pos(false), 'covid', true, this.speed);
     this.physics.add.existing(this.covid);
+
+    for (var i:number = 0; i < n_gregs; i++) { 
+      const greg = new LeSprite(this, this.rand_pos(false), 'greg', false, this.speed/4);
+      this.gregs.add(greg);
+    }
     
     for (var i:number = 0; i < n_aunt_societies; i++) {
-      do {
-        x = this.mazemap.get_rand_x();
-        y = this.mazemap.get_rand_y();
-      } while (tmp_map[y][x] == null);
-      var tmp_sprite = tmp_map[y][x];
+      var pos:Phaser.Math.Vector2 = this.rand_pos(true);
+      var tmp_sprite = this.tmp_map[pos.y][pos.x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'aunt_society', false, 0).setScale(0.5);
-      this.aunt_societies.add(tmp_map[y][x]);
+      this.tmp_map[pos.y][pos.x] = new LeSprite(this, pos, 'aunt_society', false, 0).setScale(0.5);
+      this.aunt_societies.add(this.tmp_map[pos.y][pos.x]);
     }
 
     for (var i:number = 0; i < n_europes; i++) {
-      do {
-        x = this.mazemap.get_rand_x();
-        y = this.mazemap.get_rand_y();
-      } while (tmp_map[y][x] == null);
-      var tmp_sprite = tmp_map[y][x];
+      var pos:Phaser.Math.Vector2 = this.rand_pos(true);
+      var tmp_sprite = this.tmp_map[pos.y][pos.x];
       tmp_sprite.disableBody(true, true);
-      tmp_map[y][x] = new LeSprite(this, x * this.gridsize + (this.gridsize / 2), y * this.gridsize + (this.gridsize / 2), 'europe', false, 0).setScale(0.5);
-      this.europes.add(tmp_map[y][x]);
+      this.tmp_map[pos.y][pos.x] = new LeSprite(this, pos, 'europe', false, 0).setScale(0.5);
+      this.europes.add(this.tmp_map[pos.y][pos.x]);
     }
 
     this.anims.create({
@@ -326,10 +350,9 @@ export class CovidScene extends Phaser.Scene {
     this.physics.add.overlap(this.covid, this.gregs, this.close_encounter_of_the_third_type, null, this);
     this.physics.add.overlap(this.covid, this.aunt_societies, this.miracle, null, this);
     this.physics.add.overlap(this.covid, this.europes, this.sustained_development, null, this);
-
     this.physics.add.collider(this.covid, layer);
-    this.physics.add.collider(this.gregs, layer, this.greg_hit_a_wall, null, this);
-
+    this.physics.add.collider(this.gregs, layer);
+    
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.covid.anims.play('eating');
 
@@ -347,145 +370,65 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private calcdirection(thing:LeSprite):void {
-    if (thing.next_direction == thing.current_direction) {
+    if (thing.current_direction == thing.next_direction) {
       return;
     }
-    
-    var nexttile:Phaser.Tilemaps.Tile = this.getneightiles(thing)[thing.next_direction];
+
+    const thingtile:Phaser.Tilemaps.Tile = this.tilemap.getTileAtWorldXY(thing.x, thing.y);
+    const nexttile:Phaser.Tilemaps.Tile = this.getneightiles(thing)[thing.next_direction];
     
     if (nexttile == null || nexttile.index != 0) {
       return;
     }
 
-    var ntx:number = nexttile.getCenterX();
-    var nty:number = nexttile.getCenterY();
-
-    // Only move if we are halfway inside target tile
-    // On second thought, the above comment sounds a bit kinky.
-    if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 3) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 3)) {
+    if (!this.over(thing.x, thing.y, thingtile.getCenterX(), thingtile.getCenterY())) {
       return;
     }
 
-    const thingtile = this.tilemap.getTileAtWorldXY(thing.x, thing.y);
     thing.body.reset(thingtile.getCenterX(),thingtile.getCenterY());
-
-    if (thing.next_direction == Phaser.UP) {
-      if (thing.is_turnable) {
-        thing.setAngle(270);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(0, -thing.le_speed);
-    } else if (thing.next_direction == Phaser.DOWN) {
-      if (thing.is_turnable) {
-        thing.setAngle(90);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(0, thing.le_speed);
-    } else if (thing.next_direction == Phaser.LEFT) {
-      if (thing.is_turnable) {
-        thing.setAngle(0);
-        thing.setFlipX(true);
-      }
-      thing.setVelocity(-thing.le_speed, 0);
-    } else if (thing.next_direction == Phaser.RIGHT) {
-      if (thing.is_turnable) {
-        thing.setAngle(0);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(thing.le_speed, 0);
-    }
-    thing.current_direction = thing.next_direction;
+    thing.m_ares_na_knieme_knieme();
   }
 
   private randdirection(thing:LeSprite):void {
     const thingtile:Phaser.Tilemaps.Tile = this.tilemap.getTileAtWorldXY(thing.x, thing.y);
 
-    if (thing.last_tile == thingtile) {
+    if (thingtile == thing.last_tile) {
+      return;
+    }
+
+    if (!this.over(thing.x, thing.y, thingtile.getCenterX(), thingtile.getCenterY())) {
       return;
     }
 
     thing.last_tile = thingtile;
 
-    const ntx:number = thingtile.getCenterX();
-    const nty:number = thingtile.getCenterY();
-
-    if (!Phaser.Math.Fuzzy.Equal(thing.x, ntx, 3) && !Phaser.Math.Fuzzy.Equal(thing.y, nty, 3)) {
-      return;
-    }
-
     const neightiles:Phaser.Tilemaps.Tile[] = this.getneightiles(thing);
     var neighcost:number[] = [];
-    
-    neighcost[Phaser.UP] = Phaser.Math.Distance.Chebyshev(thing.x, thing.y - 50, thing.le_target_x, thing.le_target_y);
-    neighcost[Phaser.DOWN] = Phaser.Math.Distance.Chebyshev(thing.x, thing.y + 50, thing.le_target_x, thing.le_target_y);
-    neighcost[Phaser.LEFT] = Phaser.Math.Distance.Chebyshev(thing.x - 50, thing.y, thing.le_target_x, thing.le_target_y);
-    neighcost[Phaser.RIGHT] = Phaser.Math.Distance.Chebyshev(thing.x + 50, thing.y, thing.le_target_x, thing.le_target_y);
-    
-    if (thing.current_direction == Phaser.UP || neightiles[Phaser.DOWN].index != 0) { neighcost[Phaser.DOWN] = 0; }
-    if (thing.current_direction == Phaser.DOWN || neightiles[Phaser.UP].index != 0) { neighcost[Phaser.UP] = 0; }
-    if (thing.current_direction == Phaser.LEFT || neightiles[Phaser.RIGHT].index != 0) { neighcost[Phaser.RIGHT] = 0; }
-    if (thing.current_direction == Phaser.RIGHT || neightiles[Phaser.LEFT].index != 0) { neighcost[Phaser.LEFT] = 0; }
+
+    neighcost[Phaser.UP] = (GRIDSIZE - GRIDSIZE * 2 * Math.random()) + Phaser.Math.Distance.Snake(thing.x, thing.y - GRIDSIZE, thing.le_target.x, thing.le_target.y);
+    neighcost[Phaser.DOWN] = (GRIDSIZE - GRIDSIZE * 2 * Math.random()) + Phaser.Math.Distance.Snake(thing.x, thing.y + GRIDSIZE, thing.le_target.x, thing.le_target.y);
+    neighcost[Phaser.LEFT] = (GRIDSIZE - GRIDSIZE * 2 * Math.random()) + Phaser.Math.Distance.Snake(thing.x - GRIDSIZE, thing.y, thing.le_target.x, thing.le_target.y);
+    neighcost[Phaser.RIGHT] = (GRIDSIZE - GRIDSIZE * 2 * Math.random()) + Phaser.Math.Distance.Snake(thing.x + GRIDSIZE, thing.y, thing.le_target.x, thing.le_target.y);
+
+    if (thing.current_direction == Phaser.UP) { neighcost[Phaser.DOWN] = INFINITY; }
+    if (thing.current_direction == Phaser.DOWN) { neighcost[Phaser.UP] = INFINITY; }
+    if (thing.current_direction == Phaser.LEFT) { neighcost[Phaser.RIGHT] = INFINITY; }
+    if (thing.current_direction == Phaser.RIGHT) { neighcost[Phaser.LEFT] = INFINITY; }
+
+    if (neightiles[Phaser.DOWN].index != 0) { neighcost[Phaser.DOWN] = INFINITY; }
+    if (neightiles[Phaser.UP].index != 0) { neighcost[Phaser.UP] = INFINITY; }
+    if (neightiles[Phaser.RIGHT].index != 0) { neighcost[Phaser.RIGHT] = INFINITY; }
+    if (neightiles[Phaser.LEFT].index != 0) { neighcost[Phaser.LEFT] = INFINITY; }
     
     var mincostdir = Phaser.UP;
-    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.RIGHT] > 0 && neighcost[Phaser.RIGHT] < neighcost[mincostdir])) { mincostdir = Phaser.RIGHT; }
-    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.DOWN] > 0 && neighcost[Phaser.DOWN] < neighcost[mincostdir])) { mincostdir = Phaser.DOWN; }
-    if (neighcost[mincostdir] == 0 || (neighcost[Phaser.LEFT] > 0 && neighcost[Phaser.LEFT] < neighcost[mincostdir])) { mincostdir = Phaser.LEFT; }
-
+    
+    if (neighcost[Phaser.RIGHT] < neighcost[mincostdir]) { mincostdir = Phaser.RIGHT; }
+    if (neighcost[Phaser.DOWN] < neighcost[mincostdir]) { mincostdir = Phaser.DOWN; }
+    if (neighcost[Phaser.LEFT] < neighcost[mincostdir]) { mincostdir = Phaser.LEFT; }
+    
     thing.next_direction = mincostdir;
-
-    if (thing.current_direction == thing.next_direction) {
-      return;
-    }
-
-    thing.body.reset(thingtile.getCenterX(),thingtile.getCenterY());
-
-    if (thing.next_direction == Phaser.UP) {
-      if (thing.is_turnable) {
-        thing.setAngle(270);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(0, -thing.le_speed);
-    } else if (thing.next_direction == Phaser.DOWN) {
-      if (thing.is_turnable) {
-        thing.setAngle(90);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(0, thing.le_speed);
-    } else if (thing.next_direction == Phaser.LEFT) {
-      if (thing.is_turnable) {
-        thing.setAngle(0);
-        thing.setFlipX(true);
-      }
-      thing.setVelocity(-thing.le_speed, 0);
-    } else if (thing.next_direction == Phaser.RIGHT) {
-      if (thing.is_turnable) {
-        thing.setAngle(0);
-        thing.setFlipX(false);
-      }
-      thing.setVelocity(thing.le_speed, 0);
-    }
-
-    thing.current_direction = thing.next_direction;
-  }
-
-  private move_greg(greg:LeSprite) {
-    greg.le_target_x = this.covid.x;
-    greg.le_target_y = this.covid.y;
-    this.randdirection(greg);
-  }
-
-  private greg_hit_a_wall(greg:LeSprite, wall) {    
-    var nexttile:Phaser.Tilemaps.Tile;
-    if (greg.current_direction == 0) {
-      greg.current_direction = this.rand_dir();
-    }
-
-    do {
-      greg.next_direction = this.rand_dir();
-      nexttile = this.getneightiles(greg)[greg.next_direction];
-    } while (nexttile == null || nexttile.index != 0 || greg.current_direction == greg.next_direction);
-
-    this.calcdirection(greg);
+    
+    this.calcdirection(thing);
   }
 
   public update() {
@@ -502,7 +445,11 @@ export class CovidScene extends Phaser.Scene {
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
-    this.gregs.children.iterate(this.move_greg, this);
+    this.gregs.children.iterate(function gumucha(greg:LeSprite) {
+      greg.le_target.x = this.covid.x;
+      greg.le_target.y = this.covid.y;
+      this.randdirection(greg);
+    }, this);
 
     // Info 
     this.info.setText("Level : " + this.level.toString() + "  Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
