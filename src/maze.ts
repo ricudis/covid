@@ -1,7 +1,7 @@
 export class Maze {
 	private tilemap:number[][];
 
-	public static calculateMazeDimensions(gridSize: number): {x: number, y: number} {
+	public static calculateMazeDimensions(gridSize: number, level: number = 1): {x: number, y: number} {
 		// Get browser window dimensions
 		const windowWidth = window.innerWidth;
 		const windowHeight = window.innerHeight;
@@ -22,8 +22,26 @@ export class Maze {
 		
 		// Ensure minimum maze size and odd numbers for proper maze generation
 		const minSize = 5;
-		const x = Math.max(minSize, maxMazeX % 2 === 0 ? maxMazeX - 1 : maxMazeX);
-		const y = Math.max(minSize, maxMazeY % 2 === 0 ? maxMazeY - 1 : maxMazeY);
+		let x = Math.max(minSize, maxMazeX % 2 === 0 ? maxMazeX - 1 : maxMazeX);
+		let y = Math.max(minSize, maxMazeY % 2 === 0 ? maxMazeY - 1 : maxMazeY);
+		
+		// Increase maze size by 15% for each level (but ensure it still fits in window)
+		if (level > 1) {
+			const levelMultiplier = Math.pow(1.15, level - 1); // 15% increase per level
+			const newX = Math.floor(x * levelMultiplier);
+			const newY = Math.floor(y * levelMultiplier);
+			
+			// Ensure the enlarged maze still fits in the window
+			const maxPossibleX = Math.floor((maxTilesX - 1) / 2);
+			const maxPossibleY = Math.floor((maxTilesY - 1) / 2);
+			
+			x = Math.min(newX, maxPossibleX % 2 === 0 ? maxPossibleX - 1 : maxPossibleX);
+			y = Math.min(newY, maxPossibleY % 2 === 0 ? maxPossibleY - 1 : maxPossibleY);
+			
+			// Ensure minimum size and odd numbers
+			x = Math.max(minSize, x % 2 === 0 ? x - 1 : x);
+			y = Math.max(minSize, y % 2 === 0 ? y - 1 : y);
+		}
 		
 		return {x, y};
 	}

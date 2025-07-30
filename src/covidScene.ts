@@ -296,8 +296,8 @@ export class CovidScene extends Phaser.Scene {
     var n_europes:number = 2 + Math.floor(this.level / 3); // Increase europes every 3 levels
     var n_aunt_societies:number = 1 + Math.floor(this.level / 4); // Increase aunt societies every 4 levels
     
-    // Calculate maze dimensions based on browser window size
-    const mazeDimensions = Maze.calculateMazeDimensions(GRIDSIZE);
+    // Calculate maze dimensions based on browser window size and level
+    const mazeDimensions = Maze.calculateMazeDimensions(GRIDSIZE, this.level);
     this.mazemap = new Maze(mazeDimensions.x, mazeDimensions.y);
     this.tilemap = this.make.tilemap({
         data: this.mazemap.get_tilemap(),
@@ -347,8 +347,12 @@ export class CovidScene extends Phaser.Scene {
     this.covid = new LeSprite(this, this.rand_pos(false), 'covid', true, this.speed);
     this.physics.add.existing(this.covid);
 
+    // Calculate greg speed based on level (15% faster each level)
+    const gregSpeedMultiplier = Math.pow(1.15, this.level - 1); // 15% increase per level
+    const gregSpeed = (this.speed / 4) * gregSpeedMultiplier;
+    
     for (var i:number = 0; i < n_gregs; i++) { 
-      const greg = new LeSprite(this, this.rand_pos(false), 'greg', false, this.speed/4);
+      const greg = new LeSprite(this, this.rand_pos(false), 'greg', false, gregSpeed);
       this.gregs.add(greg);
     }
     
