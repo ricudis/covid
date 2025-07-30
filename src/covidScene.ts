@@ -181,15 +181,15 @@ export class CovidScene extends Phaser.Scene {
     // Increment level and increase difficulty
     this.level++;
     
-    // Increase difficulty: more enemies, faster speed
-    const newSpeed = this.speed + 50; // Increase speed by 50 each level
-    
-    // Restart the scene with new level data
-    this.scene.restart({
+    // Prepare data for next level
+    const nextLevelData = {
       score: this.score,
       covids: this.covids,
       level: this.level
-    });
+    };
+    
+    // Show level complete scene
+    this.scene.start("levelCompleteScene", nextLevelData);
   }
 
   // EU logic

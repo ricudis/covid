@@ -6,6 +6,7 @@ import CovidScene from './covidScene';
 import PauseScene from './pauseScene';
 import DeathScene from './deathScene';
 import GameoverScene from './gameoverScene';
+import LevelCompleteScene from './levelCompleteScene';
 
 // Our game scene
 var covidScene = new CovidScene();
@@ -13,6 +14,7 @@ var introScene = new IntroScene();
 var pauseScene = new PauseScene();
 var deathScene = new DeathScene();
 var gameoverScene = new GameoverScene();
+var levelCompleteScene = new LevelCompleteScene();
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Covid19',
@@ -31,7 +33,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   },
   parent: 'game',
   backgroundColor: '#000000',
-  scene: [introScene, covidScene, pauseScene, deathScene, gameoverScene],
+  scene: [introScene, covidScene, pauseScene, deathScene, gameoverScene, levelCompleteScene],
   plugins: {
     scene: [{
         key: 'rexUI',
