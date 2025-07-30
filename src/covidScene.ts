@@ -265,7 +265,9 @@ export class CovidScene extends Phaser.Scene {
     var n_europes:number = 2;
     var n_aunt_societies:number = 1;
     
-    this.mazemap = new Maze(7, 7);
+    // Calculate maze dimensions based on browser window size
+    const mazeDimensions = Maze.calculateMazeDimensions(GRIDSIZE);
+    this.mazemap = new Maze(mazeDimensions.x, mazeDimensions.y);
     this.tilemap = this.make.tilemap({
         data: this.mazemap.get_tilemap(),
         tileWidth: GRIDSIZE,

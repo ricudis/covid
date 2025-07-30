@@ -1,6 +1,28 @@
 export class Maze {
 	private tilemap:number[][];
 
+	public static calculateMazeDimensions(gridSize: number): {x: number, y: number} {
+		// Get browser window dimensions
+		const windowWidth = window.innerWidth;
+		const windowHeight = window.innerHeight;
+		
+		// Calculate how many tiles can fit in the window
+		// Leave some margin for UI elements and ensure minimum size
+		const availableWidth = windowWidth * 0.9; // 90% of window width
+		const availableHeight = windowHeight * 0.8; // 80% of window height
+		
+		// Calculate dimensions based on available space and grid size
+		const maxTilesX = Math.floor(availableWidth / gridSize);
+		const maxTilesY = Math.floor(availableHeight / gridSize);
+		
+		// Ensure minimum maze size and odd numbers for proper maze generation
+		const minSize = 5;
+		const x = Math.max(minSize, maxTilesX % 2 === 0 ? maxTilesX - 1 : maxTilesX);
+		const y = Math.max(minSize, maxTilesY % 2 === 0 ? maxTilesY - 1 : maxTilesY);
+		
+		return {x, y};
+	}
+
 	public get_tilemap():number[][] {
 		return this.tilemap;
 	}
