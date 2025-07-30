@@ -155,11 +155,41 @@ export class CovidScene extends Phaser.Scene {
   private covid_psof(covid:LeSprite) {
     this.covids--;
     this.reposition_covid = true;
+    
+    // Check if player has no more covids left
+    if (this.covids <= 0) {
+      // Game over - no more covids left
+      this.scene.start("gameoverScene");
+      return;
+    }
+    
     // Play a dramatic death scene for the poor deceased covid
     covid.setVisible(false);
     this.scene.run("deathScene", {covid_x: covid.x, covid_y: covid.y, covids: this.covids});
     this.scene.pause();
     // on resume, the scene event callback handler reincarnates the psofed covid
+  }
+
+  private nextLevel() {
+    // Check if player has any covids left
+    if (this.covids <= 0) {
+      // Game over - no more covids left
+      this.scene.start("gameoverScene");
+      return;
+    }
+
+    // Increment level and increase difficulty
+    this.level++;
+    
+    // Increase difficulty: more enemies, faster speed
+    const newSpeed = this.speed + 50; // Increase speed by 50 each level
+    
+    // Restart the scene with new level data
+    this.scene.restart({
+      score: this.score,
+      covids: this.covids,
+      level: this.level
+    });
   }
 
   // EU logic
@@ -256,14 +286,15 @@ export class CovidScene extends Phaser.Scene {
     innocent_victim.disableBody(true, true);
 
     if (this.population == 0) {
-      // nextlevel;  
+      this.nextLevel();
     }
   }
 
   public create() { 
-    var n_gregs:number = 4;
-    var n_europes:number = 2;
-    var n_aunt_societies:number = 1;
+    // Scale difficulty based on level
+    var n_gregs:number = 4 + Math.floor(this.level / 2); // Increase gregs every 2 levels
+    var n_europes:number = 2 + Math.floor(this.level / 3); // Increase europes every 3 levels
+    var n_aunt_societies:number = 1 + Math.floor(this.level / 4); // Increase aunt societies every 4 levels
     
     // Calculate maze dimensions based on browser window size
     const mazeDimensions = Maze.calculateMazeDimensions(GRIDSIZE);
