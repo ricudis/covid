@@ -6,19 +6,24 @@ export class Maze {
 		const windowWidth = window.innerWidth;
 		const windowHeight = window.innerHeight;
 		
-		// Calculate how many tiles can fit in the window
-		// Leave some margin for UI elements and ensure minimum size
+		// Leave some margin for UI elements
 		const availableWidth = windowWidth * 0.9; // 90% of window width
 		const availableHeight = windowHeight * 0.8; // 80% of window height
 		
-		// Calculate dimensions based on available space and grid size
+		// The maze generation creates a tilemap of size (x*2+1) × (y*2+1)
+		// So we need to calculate the base dimensions that will fit in the window
 		const maxTilesX = Math.floor(availableWidth / gridSize);
 		const maxTilesY = Math.floor(availableHeight / gridSize);
 		
+		// Convert from tilemap size back to maze base dimensions
+		// If tilemap size is (x*2+1), then base dimension x = (tilemapSize - 1) / 2
+		const maxMazeX = Math.floor((maxTilesX - 1) / 2);
+		const maxMazeY = Math.floor((maxTilesY - 1) / 2);
+		
 		// Ensure minimum maze size and odd numbers for proper maze generation
 		const minSize = 5;
-		const x = Math.max(minSize, maxTilesX % 2 === 0 ? maxTilesX - 1 : maxTilesX);
-		const y = Math.max(minSize, maxTilesY % 2 === 0 ? maxTilesY - 1 : maxTilesY);
+		const x = Math.max(minSize, maxMazeX % 2 === 0 ? maxMazeX - 1 : maxMazeX);
+		const y = Math.max(minSize, maxMazeY % 2 === 0 ? maxMazeY - 1 : maxMazeY);
 		
 		return {x, y};
 	}
