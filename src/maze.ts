@@ -6,8 +6,8 @@ export class Maze {
 		const windowWidth = window.innerWidth;
 		const windowHeight = window.innerHeight;
 		
-		// Leave some margin for UI elements
-		const availableWidth = windowWidth * 0.9; // 90% of window width
+		// Initial dimensions should cover 80% of the browser window
+		const availableWidth = windowWidth * 0.8; // 80% of window width
 		const availableHeight = windowHeight * 0.8; // 80% of window height
 		
 		// The maze generation creates a tilemap of size (x*2+1) × (y*2+1)
@@ -25,18 +25,11 @@ export class Maze {
 		let x = Math.max(minSize, maxMazeX % 2 === 0 ? maxMazeX - 1 : maxMazeX);
 		let y = Math.max(minSize, maxMazeY % 2 === 0 ? maxMazeY - 1 : maxMazeY);
 		
-		// Increase maze size by 15% for each level (but ensure it still fits in window)
+		// Increase maze size by 15% for each level (no window constraints)
 		if (level > 1) {
 			const levelMultiplier = Math.pow(1.15, level - 1); // 15% increase per level
-			const newX = Math.floor(x * levelMultiplier);
-			const newY = Math.floor(y * levelMultiplier);
-			
-			// Ensure the enlarged maze still fits in the window
-			const maxPossibleX = Math.floor((maxTilesX - 1) / 2);
-			const maxPossibleY = Math.floor((maxTilesY - 1) / 2);
-			
-			x = Math.min(newX, maxPossibleX % 2 === 0 ? maxPossibleX - 1 : maxPossibleX);
-			y = Math.min(newY, maxPossibleY % 2 === 0 ? maxPossibleY - 1 : maxPossibleY);
+			x = Math.floor(x * levelMultiplier);
+			y = Math.floor(y * levelMultiplier);
 			
 			// Ensure minimum size and odd numbers
 			x = Math.max(minSize, x % 2 === 0 ? x - 1 : x);
