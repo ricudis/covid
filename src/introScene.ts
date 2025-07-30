@@ -76,14 +76,44 @@ export class IntroScene extends Phaser.Scene {
   }
 
   public create() {
-    this.cameras.main.setBounds(0, 0, window.innerWidth, window.innerHeight);  
-    const intro = this.add.image(0, 0, 'intro').setOrigin(0,0);
-    const lescaleintro:number = window.innerHeight / intro.height;
-    intro.setScale(lescaleintro, lescaleintro);
+    // Get current window dimensions
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    
+    // Set camera bounds to match window size
+    this.cameras.main.setBounds(0, 0, windowWidth, windowHeight);
+    
+    // Create intro background image
+    const intro = this.add.image(0, 0, 'intro').setOrigin(0, 0);
+    
+    // Calculate scale to fit intro image within window bounds
+    const introScaleX = windowWidth / intro.width;
+    const introScaleY = windowHeight / intro.height;
+    const introScale = Math.max(introScaleX, introScaleY); // Use max to ensure full coverage
+    intro.setScale(introScale, introScale);
+    
+    // Center the intro image
+    intro.setPosition(
+      (windowWidth - intro.width * introScale) / 2,
+      (windowHeight - intro.height * introScale) / 2
+    );
 
-    const intro_title = this.add.image(0, 0, 'intro_title').setOrigin(0,0);
-    const lescaleintrotitle:number = window.innerHeight / intro_title.height;
-    intro_title.setScale(lescaleintrotitle, lescaleintrotitle);
+    // Create title overlay
+    const intro_title = this.add.image(0, 0, 'intro_title').setOrigin(0, 0);
+    
+    // Calculate scale for title to fit within window (with some padding)
+    const titleMaxWidth = windowWidth * 0.9; // 80% of window width
+    const titleMaxHeight = windowHeight * 0.9; // 30% of window height
+    const titleScaleX = titleMaxWidth / intro_title.width;
+    const titleScaleY = titleMaxHeight / intro_title.height;
+    const titleScale = Math.min(titleScaleX, titleScaleY); // Use min to ensure it fits
+    intro_title.setScale(titleScale, titleScale);
+    
+    // Center the title
+    intro_title.setPosition(
+      (windowWidth - intro_title.width * titleScale) / 2,
+      (windowHeight - intro_title.height * titleScale) / 2
+    );
 
     const overlay = this.add.container(0, 0, intro_title).setDepth(Number.MAX_VALUE);
     overlay.alpha = 0; 
@@ -98,8 +128,8 @@ export class IntroScene extends Phaser.Scene {
     timeline.add({
       targets: this.cameras.main,
       zoom: { value: 1, duration: 4000, ease: 'Elastic'},
-      scrollX: { value: window.innerHeight/2, duration:3000, ease: 'Power2' },
-      scrollY: { value: window.innerWidth/2, duration:3000, ease: 'Power2' },
+      scrollX: { value: windowHeight/2, duration: 3000, ease: 'Power2' },
+      scrollY: { value: windowWidth/2, duration: 3000, ease: 'Power2' },
     });
     
     timeline.add({
