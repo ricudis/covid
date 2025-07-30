@@ -14,8 +14,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server"
+    "build": "NODE_OPTIONS='--openssl-legacy-provider' webpack",
+    "dev": "NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server",
+    "dev:legacy": "NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server"
   },
   "dependencies": {
     "phaser": "^3.22.0",
