@@ -25,7 +25,7 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
     super(scene, pos.x * GRIDSIZE + (GRIDSIZE / 2), pos.y * GRIDSIZE + (GRIDSIZE / 2), texture);
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    
+  
     this.is_turnable = is_turnable;
     this.current_direction = 0;
     this.next_direction = 0;
@@ -87,9 +87,12 @@ export class CovidScene extends Phaser.Scene {
   private aunt_societies: Phaser.Physics.Arcade.Group;
   private europes: Phaser.Physics.Arcade.Group;
   private population: number = 0;
-  // This is not used in the game
-  // It's just a matter of principle
-  private property: boolean = false; 
+
+  // This variable is not used in the game. It's there as a matter of principle.
+  // We are communists. We don't believe in private property
+  // we believe in the common ownership of the means of production.
+  private property: boolean = false;
+
   private mazemap: Maze;
   private tilemap:Phaser.Tilemaps.Tilemap;
   private directions:number[] = [Phaser.LEFT, Phaser.RIGHT, Phaser.UP, Phaser.DOWN];
