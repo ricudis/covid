@@ -304,7 +304,6 @@ export class CovidScene extends Phaser.Scene {
       for (var x:number = 0; x < this.mazemap.get_dim_x(); x++) {
         switch(this.mazemap.get_tile(this.mazemap.get_tilemap(), x,y)) {
           case 0:
-            this.population++;
             this.tmp_map[y][x] = this.innocent_victims.create(x * GRIDSIZE + (GRIDSIZE / 2), y * GRIDSIZE + (GRIDSIZE / 2), 'innocent_victim').setScale(0.7);
             break;
           default:
@@ -338,6 +337,9 @@ export class CovidScene extends Phaser.Scene {
       this.europes.add(this.tmp_map[pos.y][pos.x]);
     }
 
+    // Count the actual number of innocent victims after all replacements
+    this.population = this.innocent_victims.getLength();
+
     this.anims.create({
       key: 'eating',
       frames: this.anims.generateFrameNumbers('covid', { start: 0, end: 3 }),
@@ -345,7 +347,7 @@ export class CovidScene extends Phaser.Scene {
       repeat: -1
     });
     
-    this.info = this.add.text(0, 0, "Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map", { fontSize: '24px', fill: '#00ff00' });
+    this.info = this.add.text(0, 0, "");
     this.info.setScrollFactor(0, 0);
     
     // We use this to place the reincarnated covid in a new place if it was killed
@@ -457,7 +459,7 @@ export class CovidScene extends Phaser.Scene {
     }, this);
 
     // Info 
-    this.info.setText("Level : " + this.level.toString() + "  Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
+    this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
 
   }
 }
