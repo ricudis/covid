@@ -337,8 +337,13 @@ export class CovidScene extends Phaser.Scene {
       this.europes.add(this.tmp_map[pos.y][pos.x]);
     }
 
-    // Count the actual number of innocent victims after all replacements
-    this.population = this.innocent_victims.getLength();
+    // Count the actual number of active innocent victims after all replacements
+    this.population = 0;
+    this.innocent_victims.children.iterate((child: Phaser.Physics.Arcade.Sprite) => {
+      if (child.active) {
+        this.population++;
+      }
+    });
 
     this.anims.create({
       key: 'eating',
