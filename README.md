@@ -60,7 +60,7 @@ A Pac-Man inspired game where you play as a coronavirus trying to eliminate the 
 ### **Q: What do you mean, they can't?**
 **A:** Look around you.
 
-## 🎭 Character Rights
+## 🎭 Characters
 
 ### **Q: But, this is Hugh Laurie!**
 **A:** No, it's Tiny Laurie. It's only 50x50 pixels.
@@ -123,7 +123,7 @@ A Pac-Man inspired game where you play as a coronavirus trying to eliminate the 
 
 - **Arrow Keys**: Move the coronavirus
 - **M**: Toggle minimap
-- **ESC**: Boss mode (opens external link)
+- **ESC**: Boss mode
 
 ## 🏆 Level Progression
 
@@ -132,5 +132,3 @@ A Pac-Man inspired game where you play as a coronavirus trying to eliminate the 
 - Progress through levels until you run out of lives
 
 ---
-
-*Remember: This is a satirical game. The real moral is to wash your hands often and follow health guidelines.* 
