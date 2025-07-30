@@ -191,6 +191,9 @@ export class CovidScene extends Phaser.Scene {
     // Increment level and increase difficulty
     this.level++;
     
+    // Give player one more life at each subsequent level
+    this.covids++;
+    
     // Prepare data for next level
     const nextLevelData = {
       score: this.score,
