@@ -29,11 +29,25 @@ export class LevelCompleteScene extends Phaser.Scene {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
-    // Create congratulations text
+    // Create congratulations text - first line
+    this.add.text(
+      windowWidth / 2, 
+      windowHeight / 2 - 120, 
+      "Congratulations, COVID!", 
+      { 
+        fontSize: '32px', 
+        fill: '#00ff00',
+        fontFamily: 'Arial',
+        stroke: '#000000',
+        strokeThickness: 4
+      }
+    ).setOrigin(0.5);
+
+    // Create congratulations text - second line
     this.congratulationsText = this.add.text(
       windowWidth / 2, 
-      windowHeight / 2 - 100, 
-      "Congratulations, you eliminated the whole population!", 
+      windowHeight / 2 - 80, 
+      "You eliminated the whole population!", 
       { 
         fontSize: '32px', 
         fill: '#00ff00',
