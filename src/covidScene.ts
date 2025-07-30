@@ -46,30 +46,40 @@ class LeSprite extends Phaser.Physics.Arcade.Sprite {
     if (this.current_direction == this.next_direction) {
       return;
     }
+    
+    // Calculate adjusted speed based on whether current tile has innocent victim
+    let adjustedSpeed = this.le_speed;
+    if (this.scene instanceof CovidScene) {
+      const covidScene = this.scene as CovidScene;
+      if (covidScene.isTileEmpty(this.x, this.y)) {
+        adjustedSpeed = this.le_speed * 1.2; // 20% faster in empty space
+      }
+    }
+    
     if (this.next_direction == Phaser.UP) {
       if (this.is_turnable) {
         this.setAngle(270);
         this.setFlipX(false);
       }
-      this.setVelocity(0, -this.le_speed);
+      this.setVelocity(0, -adjustedSpeed);
     } else if (this.next_direction == Phaser.DOWN) {
       if (this.is_turnable) {
         this.setAngle(90);
         this.setFlipX(false);
       }
-      this.setVelocity(0, this.le_speed);
+      this.setVelocity(0, adjustedSpeed);
     } else if (this.next_direction == Phaser.LEFT) {
       if (this.is_turnable) {
         this.setAngle(0);
         this.setFlipX(true);
       }
-      this.setVelocity(-this.le_speed, 0);
+      this.setVelocity(-adjustedSpeed, 0);
     } else if (this.next_direction == Phaser.RIGHT) {
       if (this.is_turnable) {
         this.setAngle(0);
         this.setFlipX(false);
       }
-      this.setVelocity(this.le_speed, 0);
+      this.setVelocity(adjustedSpeed, 0);
     }
     
     this.current_direction = this.next_direction;
@@ -220,6 +230,21 @@ export class CovidScene extends Phaser.Scene {
 
   private over(x:number, y:number, x1:number, y1:number) {
     return (Phaser.Math.Fuzzy.Equal(x, x1, 4) && Phaser.Math.Fuzzy.Equal(y, y1, 4));
+  }
+
+  public isTileEmpty(worldX: number, worldY: number): boolean {
+    // Convert world coordinates to tile coordinates
+    const tileX = Math.floor(worldX / GRIDSIZE);
+    const tileY = Math.floor(worldY / GRIDSIZE);
+    
+    // Check if the tile position is valid
+    if (tileY < 0 || tileY >= this.tmp_map.length || tileX < 0 || tileX >= this.tmp_map[0].length) {
+      return true; // Consider out of bounds as empty
+    }
+    
+    // Check if there's an innocent victim at this tile
+    const sprite = this.tmp_map[tileY][tileX];
+    return sprite === null || !sprite.active;
   }
  
   private close_encounter_of_the_third_type(covid:LeSprite, greg:LeSprite) {
