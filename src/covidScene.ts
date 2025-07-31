@@ -102,6 +102,7 @@ export class CovidScene extends Phaser.Scene {
   private bulletSpeed: number = 350;
   private canShoot: boolean = true;
   private shootingEnabled: boolean = true;
+  private bulletsRemaining: number = 0;
 
   // This variable is not used in the game. It's there as a matter of principle.
   // We are communists. We don't believe in private property
@@ -344,8 +345,8 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private shootBullet() {
-    if (!this.shootingEnabled || !this.canShoot || this.bullets.countActive() > 0) {
-      return; // Shooting disabled or only one bullet at a time
+    if (!this.shootingEnabled || !this.canShoot || this.bullets.countActive() > 0 || this.bulletsRemaining <= 0) {
+      return; // Shooting disabled, only one bullet at a time, or no bullets remaining
     }
 
     // Create bullet at covid's position
@@ -381,7 +382,8 @@ export class CovidScene extends Phaser.Scene {
     
     bullet.setVelocity(velocityX, velocityY);
     
-    // Prevent shooting until bullet is destroyed
+    // Decrement bullet count and prevent shooting until bullet is destroyed
+    this.bulletsRemaining--;
     this.canShoot = false;
   }
 
@@ -390,6 +392,9 @@ export class CovidScene extends Phaser.Scene {
     var n_gregs: number = 4 + Math.floor(this.level / 2); // Increase gregs every 2 levels
     var n_europes: number = 2 + Math.floor(this.level / 3); // Increase europes every 3 levels
     var n_aunt_societies: number = 1 + Math.floor(this.level / 4); // Increase aunt societies every 4 levels
+    
+    // Set bullet limit to match number of gregs
+    this.bulletsRemaining = n_gregs;
 
     // Calculate maze dimensions based on browser window size and level
     const mazeDimensions = Maze.calculateMazeDimensions(GRIDSIZE, this.level);
@@ -605,7 +610,7 @@ export class CovidScene extends Phaser.Scene {
     }, this);
 
     // Info
-    const shootingText = this.shootingEnabled ? "SPACE to exercise 2nd amendment rights" : "";
+    const shootingText = this.shootingEnabled ? `SPACE to shoot (${this.bulletsRemaining})` : "Shooting disabled";
     this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map, " + shootingText);
 
   }
