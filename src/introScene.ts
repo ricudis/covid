@@ -9,6 +9,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class IntroScene extends Phaser.Scene {
   rexUI: any;
+  private mainDialog: any;
+  
   constructor() {
     super(sceneConfig);
   }
@@ -28,9 +30,64 @@ export class IntroScene extends Phaser.Scene {
     });
   }
 
+  private createLocationDialog() {
+    var locationDialog = this.rexUI.add.dialog({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      width: 400,
+      background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+      title: this.rexUI.add.label({
+        text: this.add.text(0, 0, 'Are you living in the US?', { fontSize: '28px', color: '#ffffff' }),
+        space: { left: 20, right: 20, top: 20, bottom: 20 }
+      }),
+      choices: [
+        this.createLabel('Yes'),
+        this.createLabel('No'),
+      ],
+      space: {
+        left: 20, right: 20, top: 20, bottom: 20,
+        choices: 25,
+        toolbarItem: 5,
+        choice: 15,
+        action: 15,
+      },
+      align: {
+        choices: 'center'
+      },
+      click: { mode: 'release' }
+    })
+      .setDraggable('background')
+      .layout()
+      .popUp(500);
+
+    locationDialog
+      .on('button.over', function (button, groupName, index, pointer, event) {
+        button.getElement('background').setStrokeStyle(1, 0xffffff);
+      })
+      .on('button.out', function (button, groupName, index, pointer, event) {
+        button.getElement('background').setStrokeStyle();
+      })
+      .on('button.click', function (button, groupName, index, pointer, event) {
+        const isInUS = index === 0; // Yes = 0, No = 1
+        this.startGame(isInUS);
+      }, this);
+
+    return locationDialog;
+  }
+
+  private startGame(shootingEnabled: boolean) {
+    this.scene.start("covidScene", { 
+      score: 0, 
+      level: 1, 
+      covids: 8, 
+      shootingEnabled: shootingEnabled 
+    });
+    this.scene.stop();
+  }
+
   private createDialog() {
     var dialog = this.rexUI.add.dialog({
-      x: 200,
+      x: window.innerWidth / 2,
       y: window.innerHeight / 2,
       width: 300,
       background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
@@ -54,6 +111,7 @@ export class IntroScene extends Phaser.Scene {
       .layout()
       .popUp(1000);
 
+    this.mainDialog = dialog;
 
     dialog
       .on('button.over', function (button, groupName, index, pointer, event) {
@@ -66,10 +124,9 @@ export class IntroScene extends Phaser.Scene {
         if (index == 1) {
           window.open('https://github.com/ricudis/covid/');
         } else if (index == 0) {
-          this.scene.active = false;
-          this.scene.visible = false;
-          this.scene.start("covidScene", { score: 0, level: 1, covids: 8 });
-          this.scene.stop();
+          // Hide main dialog and show location dialog
+          this.mainDialog.setVisible(false);
+          this.createLocationDialog();
         }
       }, this);
 

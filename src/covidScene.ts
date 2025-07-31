@@ -101,6 +101,7 @@ export class CovidScene extends Phaser.Scene {
   private population: number = 0;
   private bulletSpeed: number = 350;
   private canShoot: boolean = true;
+  private shootingEnabled: boolean = true;
 
   // This variable is not used in the game. It's there as a matter of principle.
   // We are communists. We don't believe in private property
@@ -127,6 +128,7 @@ export class CovidScene extends Phaser.Scene {
     this.score = data.score;
     this.covids = data.covids;
     this.level = data.level;
+    this.shootingEnabled = data.shootingEnabled !== undefined ? data.shootingEnabled : true;
   }
 
   public preload() {
@@ -342,8 +344,8 @@ export class CovidScene extends Phaser.Scene {
   }
 
   private shootBullet() {
-    if (!this.canShoot || this.bullets.countActive() > 0) {
-      return; // Only one bullet at a time
+    if (!this.shootingEnabled || !this.canShoot || this.bullets.countActive() > 0) {
+      return; // Shooting disabled or only one bullet at a time
     }
 
     // Create bullet at covid's position
@@ -603,7 +605,8 @@ export class CovidScene extends Phaser.Scene {
     }, this);
 
     // Info
-    this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map, SPACE to shoot");
+    const shootingText = this.shootingEnabled ? "SPACE to exercise 2nd amendment rights" : "";
+    this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map, " + shootingText);
 
   }
 }
