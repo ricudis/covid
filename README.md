@@ -251,10 +251,23 @@ In conclusion, the COVID-19 game's shooting mechanics serve as a powerful exampl
 
 ## 🚀 Getting Started
 
+### Web Version
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Build the project: `npm run build`
 4. Open `index.html` in your browser
+
+### Desktop App (Tauri)
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Install Tauri CLI: `npm install --save-dev @tauri-apps/cli`
+4. Build for development: `npm run tauri:dev`
+5. Build for production: `npm run tauri:build`
+
+The desktop app will be created in `src-tauri/target/release/bundle/`:
+- **macOS**: `.app` bundle and `.dmg` installer
+- **Windows**: `.exe` installer
+- **Linux**: `.AppImage` and `.deb` packages
 
 ## 🎯 Game Controls
 
