@@ -39,11 +39,11 @@ export class LevelCompleteScene extends Phaser.Scene {
 
     // Create congratulations text - first line
     this.add.text(
-      windowWidth / 2, 
-      windowHeight / 2 - 120, 
-      "Congratulations, COVID!", 
-      { 
-        fontSize: '32px', 
+      windowWidth / 2,
+      windowHeight / 2 - 120,
+      "Congratulations, COVID!",
+      {
+        fontSize: '32px',
         fill: '#00ff00',
         fontFamily: 'Arial',
         stroke: '#000000',
@@ -53,11 +53,11 @@ export class LevelCompleteScene extends Phaser.Scene {
 
     // Create congratulations text - second line
     this.congratulationsText = this.add.text(
-      windowWidth / 2, 
-      windowHeight / 2 - 80, 
-      "You eliminated the whole population!", 
-      { 
-        fontSize: '32px', 
+      windowWidth / 2,
+      windowHeight / 2 - 80,
+      "You eliminated the whole population!",
+      {
+        fontSize: '32px',
         fill: '#00ff00',
         fontFamily: 'Arial',
         stroke: '#000000',
@@ -67,8 +67,8 @@ export class LevelCompleteScene extends Phaser.Scene {
 
     // Create big covid sprite
     this.covid = this.add.sprite(
-      windowWidth / 2, 
-      windowHeight / 2 + 50, 
+      windowWidth / 2,
+      windowHeight / 2 + 50,
       'covid'
     ).setScale(3);
 
@@ -127,21 +127,21 @@ export class LevelCompleteScene extends Phaser.Scene {
   private spawnSkullEmoji() {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    
+
     // Random position at top of screen
     const x = Math.random() * windowWidth;
     const y = -50; // Start above the screen
-    
+
     // Create skull emoji with random properties
     const skull = this.add.text(x, y, '💀', {
       fontSize: Math.random() * 20 + 20 + 'px', // Random size between 20-40px
       fill: '#00ff00',
       fontFamily: 'Arial'
     }).setOrigin(0.5);
-    
+
     // Add to tracking array
     this.skullEmojis.push(skull);
-    
+
     // Create falling animation
     this.tweens.add({
       targets: skull,
@@ -157,7 +157,7 @@ export class LevelCompleteScene extends Phaser.Scene {
         skull.destroy();
       }
     });
-    
+
     // Add slight rotation for more dynamic effect
     this.tweens.add({
       targets: skull,

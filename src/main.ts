@@ -1,7 +1,7 @@
 
 import * as Phaser from 'phaser';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-import IntroScene from './introScene'; 
+import IntroScene from './introScene';
 import CovidScene from './covidScene';
 import PauseScene from './pauseScene';
 import DeathScene from './deathScene';
@@ -36,11 +36,11 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   scene: [introScene, covidScene, pauseScene, deathScene, gameoverScene, levelCompleteScene],
   plugins: {
     scene: [{
-        key: 'rexUI',
-        plugin: UIPlugin,
-        mapping: 'rexUI'
+      key: 'rexUI',
+      plugin: UIPlugin,
+      mapping: 'rexUI'
     },
-    // ...
+      // ...
     ]
   },
 };
