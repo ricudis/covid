@@ -91,12 +91,16 @@ export class CovidScene extends Phaser.Scene {
   rexUI: any;
   private speed: number = 200;
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+  private spaceKey: Phaser.Input.Keyboard.Key;
   private covid: LeSprite;
   private innocent_victims: Phaser.Physics.Arcade.StaticGroup;
   private gregs: Phaser.Physics.Arcade.Group
   private aunt_societies: Phaser.Physics.Arcade.Group;
   private europes: Phaser.Physics.Arcade.Group;
+  private bullets: Phaser.Physics.Arcade.Group;
   private population: number = 0;
+  private bulletSpeed: number = 300;
+  private canShoot: boolean = true;
 
   // This variable is not used in the game. It's there as a matter of principle.
   // We are communists. We don't believe in private property
@@ -131,6 +135,7 @@ export class CovidScene extends Phaser.Scene {
     this.load.spritesheet('greg', 'assets/gh.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
     this.load.spritesheet('aunt_society', 'assets/koutala.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
     this.load.spritesheet('europe', 'assets/eu-flag.png', { frameWidth: GRIDSIZE, frameHeight: GRIDSIZE });
+    this.load.image('bullet', 'assets/bullet.png');
     this.load.image('maptileset', 'assets/mazetiles.png');
   }
 
@@ -318,6 +323,66 @@ export class CovidScene extends Phaser.Scene {
     }
   }
 
+  private bulletHitWall(bullet: Phaser.Physics.Arcade.Sprite) {
+    bullet.destroy();
+    this.canShoot = true;
+  }
+
+  private bulletHitGreg(bullet: Phaser.Physics.Arcade.Sprite, greg: LeSprite) {
+    // Kill the greg
+    greg.setVisible(false);
+    greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
+    
+    // Destroy the bullet
+    bullet.destroy();
+    this.canShoot = true;
+    
+    // Add score for killing greg
+    this.score += 50;
+  }
+
+  private shootBullet() {
+    if (!this.canShoot || this.bullets.countActive() > 0) {
+      return; // Only one bullet at a time
+    }
+
+    // Create bullet at covid's position
+    const bullet = this.bullets.create(this.covid.x, this.covid.y, 'bullet');
+    bullet.setScale(0.5); // Make bullet smaller
+    
+    // Set bullet velocity based on covid's current direction
+    let velocityX = 0;
+    let velocityY = 0;
+    
+    switch (this.covid.current_direction) {
+      case Phaser.UP:
+        velocityY = -this.bulletSpeed;
+        bullet.setAngle(270);
+        break;
+      case Phaser.DOWN:
+        velocityY = this.bulletSpeed;
+        bullet.setAngle(90);
+        break;
+      case Phaser.LEFT:
+        velocityX = -this.bulletSpeed;
+        bullet.setAngle(180);
+        break;
+      case Phaser.RIGHT:
+        velocityX = this.bulletSpeed;
+        bullet.setAngle(0);
+        break;
+      default:
+        // If covid is not moving, don't shoot
+        bullet.destroy();
+        return;
+    }
+    
+    bullet.setVelocity(velocityX, velocityY);
+    
+    // Prevent shooting until bullet is destroyed
+    this.canShoot = false;
+  }
+
   public create() {
     // Scale difficulty based on level
     var n_gregs: number = 4 + Math.floor(this.level / 2); // Increase gregs every 2 levels
@@ -357,6 +422,7 @@ export class CovidScene extends Phaser.Scene {
     this.gregs = this.physics.add.group();
     this.aunt_societies = this.physics.add.group();
     this.europes = this.physics.add.group();
+    this.bullets = this.physics.add.group();
 
     for (var y: number = 0; y < this.mazemap.get_dim_y(); y++) {
       this.tmp_map[y] = [];
@@ -427,8 +493,13 @@ export class CovidScene extends Phaser.Scene {
     this.physics.add.overlap(this.covid, this.europes, this.sustained_development, null, this);
     this.physics.add.collider(this.covid, layer);
     this.physics.add.collider(this.gregs, layer);
+    
+    // Bullet collision handling
+    this.physics.add.collider(this.bullets, layer, this.bulletHitWall, null, this);
+    this.physics.add.overlap(this.bullets, this.gregs, this.bulletHitGreg, null, this);
 
     this.cursorKeys = this.input.keyboard.createCursorKeys();
+    this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.covid.anims.play('eating');
 
     this.cameras.main.startFollow(this.covid, true, 0.05, 0.05);
@@ -517,6 +588,11 @@ export class CovidScene extends Phaser.Scene {
       this.covid.next_direction = Phaser.DOWN;
     }
 
+    // Handle space key for shooting
+    if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
+      this.shootBullet();
+    }
+
     this.calcdirection(this.covid);
 
     // Move around gregs randomly
@@ -527,7 +603,7 @@ export class CovidScene extends Phaser.Scene {
     }, this);
 
     // Info
-    this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map");
+    this.info.setText("Level : " + this.level.toString() + " Population : " + this.population.toString() + " Score : " + this.score.toString() + "  Covids : " + this.covids.toString() + "   Press M to toggle map, SPACE to shoot");
 
   }
 }
