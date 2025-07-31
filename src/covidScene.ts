@@ -98,11 +98,14 @@ export class CovidScene extends Phaser.Scene {
   private aunt_societies: Phaser.Physics.Arcade.Group;
   private europes: Phaser.Physics.Arcade.Group;
   private bullets: Phaser.Physics.Arcade.Group;
+  private gregBullets: Phaser.Physics.Arcade.Group;
   private population: number = 0;
   private bulletSpeed: number = 350;
   private canShoot: boolean = true;
   private shootingEnabled: boolean = true;
   private bulletsRemaining: number = 0;
+  private gregsThatCanShoot: Set<LeSprite> = new Set();
+  private gregShootProbability: number = 0.7; // 70% chance to shoot when conditions are met
 
   // This variable is not used in the game. It's there as a matter of principle.
   // We are communists. We don't believe in private property
@@ -237,6 +240,18 @@ export class CovidScene extends Phaser.Scene {
   private reincarnate_greg(greg: LeSprite) {
     // reposition the reincarnated greg on a random map location
     greg.reposition(this.rand_pos(false));
+    
+    // Check if this greg can shoot back
+    if (this.gregsThatCanShoot.has(greg)) {
+      // Remove from shooting set (one shot per level)
+      this.gregsThatCanShoot.delete(greg);
+      
+      // Mark greg with red background to show it can shoot
+      this.markGregAsShooter(greg);
+      
+      // Try to shoot at covid with some probability
+      this.tryGregShoot(greg);
+    }
   }
 
   private over(x: number, y: number, x1: number, y1: number) {
@@ -336,12 +351,155 @@ export class CovidScene extends Phaser.Scene {
     greg.setVisible(false);
     greg.le_timer = this.time.delayedCall(5000, this.reincarnate_greg, [greg], this);
     
+    // Mark this greg as able to shoot back when reincarnated
+    this.gregsThatCanShoot.add(greg);
+    
     // Destroy the bullet
     bullet.destroy();
     this.canShoot = true;
     
     // Add score for killing greg
     this.score += 50;
+  }
+
+  private markGregAsShooter(greg: LeSprite) {
+    // Add a red background to indicate this greg can shoot
+    const redBackground = this.add.rectangle(greg.x, greg.y, GRIDSIZE * 0.8, GRIDSIZE * 0.8, 0xff0000, 0.3);
+    redBackground.setDepth(greg.depth - 1); // Place behind the greg sprite
+    greg.setData('redBackground', redBackground);
+  }
+
+  private removeGregShooterMark(greg: LeSprite) {
+    // Remove the red background
+    const redBackground = greg.getData('redBackground');
+    if (redBackground) {
+      redBackground.destroy();
+      greg.setData('redBackground', null);
+    }
+  }
+
+  private gregBulletHitWall(bullet: Phaser.Physics.Arcade.Sprite) {
+    bullet.destroy();
+  }
+
+  private gregBulletHitCovid(bullet: Phaser.Physics.Arcade.Sprite, covid: LeSprite) {
+    // Kill the covid
+    this.covid_psof(covid);
+    
+    // Destroy the bullet
+    bullet.destroy();
+  }
+
+  private tryGregShoot(greg: LeSprite) {
+    // Random probability check
+    if (Math.random() > this.gregShootProbability) {
+      console.log("Greg failed probability check");
+      return;
+    }
+
+    // Check if there's a clear line of sight to covid
+    if (!this.hasLineOfSight(greg, this.covid)) {
+      console.log("Greg failed line of sight check");
+      return;
+    }
+
+    // Calculate direction to covid
+    const direction = this.getDirectionToTarget(greg, this.covid);
+    if (direction === null) {
+      console.log("Greg failed direction check");
+      return;
+    }
+
+    // Remove red background since greg is shooting
+    this.removeGregShooterMark(greg);
+
+    // Create greg bullet
+    const bullet = this.gregBullets.create(greg.x, greg.y, 'bullet');
+    bullet.setScale(0.4); // Slightly smaller than player bullets
+    
+    // Set bullet velocity based on direction
+    let velocityX = 0;
+    let velocityY = 0;
+    
+    switch (direction) {
+      case Phaser.UP:
+        velocityY = -this.bulletSpeed;
+        bullet.setAngle(270);
+        break;
+      case Phaser.DOWN:
+        velocityY = this.bulletSpeed;
+        bullet.setAngle(90);
+        break;
+      case Phaser.LEFT:
+        velocityX = -this.bulletSpeed;
+        bullet.setAngle(180);
+        break;
+      case Phaser.RIGHT:
+        velocityX = this.bulletSpeed;
+        bullet.setAngle(0);
+        break;
+      default:
+        bullet.destroy();
+        return;
+    }
+    
+    bullet.setVelocity(velocityX, velocityY);
+    console.log("Greg successfully shot at covid!");
+  }
+
+  private hasLineOfSight(shooter: LeSprite, target: LeSprite): boolean {
+    const startX = Math.floor(shooter.x / GRIDSIZE);
+    const startY = Math.floor(shooter.y / GRIDSIZE);
+    const endX = Math.floor(target.x / GRIDSIZE);
+    const endY = Math.floor(target.y / GRIDSIZE);
+    
+    // Check if they're close enough (within 3 tiles)
+    const distance = Math.abs(startX - endX) + Math.abs(startY - endY);
+    if (distance > 3) {
+      return false; // Too far away
+    }
+    
+    // Simple line of sight check - if they're in the same row or column
+    if (startX === endX) {
+      // Same column, check vertical line
+      const minY = Math.min(startY, endY);
+      const maxY = Math.max(startY, endY);
+      for (let y = minY + 1; y < maxY; y++) {
+        if (this.mazemap.get_tile(this.mazemap.get_tilemap(), startX, y) !== 0) {
+          return false; // Wall in the way
+        }
+      }
+      return true;
+    } else if (startY === endY) {
+      // Same row, check horizontal line
+      const minX = Math.min(startX, endX);
+      const maxX = Math.max(startX, endX);
+      for (let x = minX + 1; x < maxX; x++) {
+        if (this.mazemap.get_tile(this.mazemap.get_tilemap(), x, startY) !== 0) {
+          return false; // Wall in the way
+        }
+      }
+      return true;
+    }
+    
+    return false; // Not in same row or column
+  }
+
+  private getDirectionToTarget(shooter: LeSprite, target: LeSprite): number | null {
+    const startX = Math.floor(shooter.x / GRIDSIZE);
+    const startY = Math.floor(shooter.y / GRIDSIZE);
+    const endX = Math.floor(target.x / GRIDSIZE);
+    const endY = Math.floor(target.y / GRIDSIZE);
+    
+    if (startX === endX) {
+      // Same column
+      return startY < endY ? Phaser.DOWN : Phaser.UP;
+    } else if (startY === endY) {
+      // Same row
+      return startX < endX ? Phaser.RIGHT : Phaser.LEFT;
+    }
+    
+    return null; // Not aligned
   }
 
   private shootBullet() {
@@ -430,6 +588,7 @@ export class CovidScene extends Phaser.Scene {
     this.aunt_societies = this.physics.add.group();
     this.europes = this.physics.add.group();
     this.bullets = this.physics.add.group();
+    this.gregBullets = this.physics.add.group();
 
     for (var y: number = 0; y < this.mazemap.get_dim_y(); y++) {
       this.tmp_map[y] = [];
@@ -504,6 +663,10 @@ export class CovidScene extends Phaser.Scene {
     // Bullet collision handling
     this.physics.add.collider(this.bullets, layer, this.bulletHitWall, null, this);
     this.physics.add.overlap(this.bullets, this.gregs, this.bulletHitGreg, null, this);
+    
+    // Greg bullet collision handling
+    this.physics.add.collider(this.gregBullets, layer, this.gregBulletHitWall, null, this);
+    this.physics.add.overlap(this.gregBullets, this.covid, this.gregBulletHitCovid, null, this);
 
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -607,6 +770,12 @@ export class CovidScene extends Phaser.Scene {
       greg.le_target.x = this.covid.x;
       greg.le_target.y = this.covid.y;
       this.randdirection(greg);
+      
+      // Update red background position if greg has one
+      const redBackground = greg.getData('redBackground');
+      if (redBackground) {
+        redBackground.setPosition(greg.x, greg.y);
+      }
     }, this);
 
     // Info
