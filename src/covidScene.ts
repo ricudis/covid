@@ -99,7 +99,7 @@ export class CovidScene extends Phaser.Scene {
   private europes: Phaser.Physics.Arcade.Group;
   private bullets: Phaser.Physics.Arcade.Group;
   private population: number = 0;
-  private bulletSpeed: number = 300;
+  private bulletSpeed: number = 350;
   private canShoot: boolean = true;
 
   // This variable is not used in the game. It's there as a matter of principle.
